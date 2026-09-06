@@ -11,13 +11,11 @@
 </p>
 
 <p align="center">
-  <a href="https://why.com"><strong>Try WHY</strong></a>
-  ·
-  <a href="https://why.com/research"><strong>Research</strong></a>
+  <a href="https://why.com"><strong>Try WHY.com</strong></a>
   ·
   <a href="https://why.com/whitepaper.pdf"><strong>Whitepaper</strong></a>
   ·
-  <a href="CONTRIBUTING.md"><strong>Contribute</strong></a>
+  <a href="https://why.com/pro"><strong>Contribute</strong></a>
 </p>
 
 <p align="center">
