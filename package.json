@@ -1,0 +1,25 @@
+{
+  "name": "why-com",
+  "version": "1.0.0",
+  "description": "One answer. Three questions. An open-source curiosity engine.",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "homepage": "https://why.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/whyagents/why.com.git"
+  },
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "build": "node scripts/build-public.mjs",
+    "test": "node --test tests/*.mjs",
+    "eval:voice": "node scripts/eval-voice.mjs",
+    "daily:labels": "node scripts/generate-daily-door-copy.mjs"
+  },
+  "dependencies": {
+    "@netlify/database": "2.0.0"
+  }
+}

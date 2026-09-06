@@ -1,0 +1,23 @@
+name: Feature request
+description: Propose a focused improvement to the curiosity loop.
+title: "[Idea]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What user problem does this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: change
+    attributes:
+      label: What would change?
+      description: Describe the smallest version that creates the outcome.
+    validations:
+      required: true
+  - type: textarea
+    id: invariant
+    attributes:
+      label: What should remain unchanged?
+      description: Note privacy, reliability, voice, accessibility, or product-loop constraints.

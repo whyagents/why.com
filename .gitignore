@@ -1,0 +1,96 @@
+# WHY's repository is an explicit source allowlist. This folder also contains
+# private working material that must never be staged by a broad `git add .`.
+/*
+
+# Repository and deployment documentation
+!/.gitignore
+!/AGENTS.md
+!/DEPLOY.md
+!/README.md
+!/CONTRIBUTING.md
+!/SECURITY.md
+!/TRADEMARKS.md
+!/LICENSE
+!/package.json
+!/package-lock.json
+!/.github/
+!/.github/**
+
+# Netlify configuration and the one production function
+!/netlify.toml
+!/netlify/
+/netlify/*
+!/netlify/functions/
+/netlify/functions/*
+!/netlify/functions/ultimate-search.mjs
+!/netlify/functions/daily-why.mjs
+!/netlify/functions/publish-daily-why.mjs
+!/netlify/functions/category-seeds.mjs
+!/netlify/lib/
+/netlify/lib/*
+!/netlify/lib/daily-why.mjs
+!/netlify/lib/daily-why-generation.mjs
+!/netlify/lib/daily-why-store.mjs
+!/netlify/lib/daily-why-labels.generated.mjs
+!/netlify/lib/slate-order.mjs
+!/netlify/lib/stakes.mjs
+!/netlify/lib/category-seeds.mjs
+!/netlify/lib/category-seed-store.mjs
+!/netlify/database/
+/netlify/database/*
+!/netlify/database/migrations/
+/netlify/database/migrations/*
+!/netlify/database/migrations/202608270001_daily_why_choices.sql
+!/netlify/database/migrations/202608280001_daily_why_choice_position.sql
+!/netlify/database/migrations/202608290001_daily_why_episodes.sql
+!/netlify/database/migrations/202608300001_category_seeds.sql
+
+# Build and evaluation scripts
+!/scripts/
+/scripts/*
+!/scripts/build-public.mjs
+!/scripts/eval-voice.mjs
+!/scripts/generate-daily-door-copy.mjs
+
+# Product tests
+!/tests/
+/tests/*
+!/tests/*.mjs
+
+# Intentional public product source and assets
+!/index.html
+!/why-app.js
+!/why-consent.css
+!/why-consent.js
+!/about.html
+!/ai.html
+!/app.html
+!/privacy.html
+!/pro.html
+!/research.html
+!/swarm-demo.js
+!/swarm.html
+!/terms.html
+!/banner.png
+!/banner.svg
+!/deck.html
+!/favicon.svg
+!/litepaper.pdf
+!/os.png
+!/whitepaper.pdf
+!/public/
+/public/*
+!/public/og.png
+
+# Generated and machine-local state stays excluded even if future allowlists grow.
+/.netlify/
+/.netlify-dist/
+/.DS_Store
+/.codex-screens/
+/.opencode/
+/artifacts/
+/node_modules/
+/.env
+/.env.*
+!/.env.example
+*.log

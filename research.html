@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="why-consent.css">
+<script src="why-consent.js" data-cookieconsent="ignore"></script>
+<script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="5120e25d-e89c-489a-818c-cf42859f1dcb" data-blockingmode="auto" type="text/javascript" data-georegions="{'region':'AE','cbid':'70ca0daa-9642-4517-87a3-0ef9083cd6ff'}"></script>
+
+<!-- The Direct Meta Pixel Code (Manually Blocked) -->
+<script type="text/plain" data-cookieconsent="marketing">
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1686262202425031');
+fbq('track', 'PageView');
+</script>
+<!-- End Meta Pixel Code -->
+
+
+<!-- Google Tag Manager -->
+<script type="text/plain" data-cookieconsent="statistics">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KSXF8FP2');</script>
+<!-- End Google Tag Manager -->
+
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="WHY Research tests whether human curiosity, visible alternatives, and expert judgment can teach AI what to question next.">
+  <meta property="og:title" content="WHY Research — A Prudent Question">
+  <meta property="og:description" content="AI learned how to answer. WHY Research asks whether comparative human judgment can teach it what to question next.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="WHY">
+  <title>Research - WHY</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml"/>
+  <link rel="shortcut icon" href="favicon.svg" type="image/svg+xml"/>
+  <link rel="apple-touch-icon" href="favicon.svg"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #080806;
+      --text: #F0EBE0;
+      --muted: #7a7468;
+      --accent: #a08c5a;
+      --accent-hover: #c4aa72;
+      --hairline: rgba(255, 255, 255, 0.08);
+      --veil: rgba(255, 255, 255, 0.03);
+      --veil-strong: rgba(255, 255, 255, 0.055);
+      --shadow: rgba(0, 0, 0, 0.45);
+      --page: min(720px, calc(100vw - 44px));
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: var(--bg);
+      color: var(--text);
+      cursor: none;
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 50% -20%, rgba(160, 140, 90, 0.12), transparent 42rem),
+        linear-gradient(180deg, #0b0a07 0%, var(--bg) 28rem, #070704 100%);
+      color: var(--text);
+      font-family: "DM Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 1.05rem;
+      font-weight: 300;
+      line-height: 1.82;
+      letter-spacing: 0;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image:
+        radial-gradient(circle at 25% 15%, rgba(255,255,255,0.09) 0 1px, transparent 1px),
+        radial-gradient(circle at 70% 40%, rgba(255,255,255,0.07) 0 1px, transparent 1px),
+        radial-gradient(circle at 40% 80%, rgba(255,255,255,0.06) 0 1px, transparent 1px);
+      background-size: 180px 180px;
+      opacity: 0.028;
+      mix-blend-mode: screen;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,0.015), transparent 18%, transparent 82%, rgba(255,255,255,0.012)),
+        linear-gradient(180deg, rgba(255,255,255,0.018), transparent 12%, transparent 88%, rgba(0,0,0,0.22));
+    }
+
+    ::selection {
+      background: rgba(160, 140, 90, 0.34);
+      color: var(--text);
+    }
+
+    .site-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 40;
+      padding: 1.4rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(8, 8, 6, 0.78);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+    }
+
+    .nav-logo {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.7rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .nav-logo a {
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-logo em {
+      color: var(--accent);
+      font-style: normal;
+    }
+
+    .nav-menu {
+      position: relative;
+    }
+
+    .ic {
+      display: block;
+      flex: 0 0 auto;
+      width: 1em;
+      height: 1em;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .ic-solid { fill: currentColor; stroke: none; }
+
+    .nav-menu-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--text);
+      transition: all 0.3s ease;
+    }
+
+    .nav-menu-btn .ic { width: 17px; height: 17px; }
+
+    .nav-menu-btn:hover {
+      background: var(--text);
+      color: var(--bg);
+      border-color: var(--text);
+    }
+
+    .nav-dropdown {
+      position: absolute;
+      top: calc(100% + 0.9rem);
+      right: 0;
+      min-width: 232px;
+      padding: 0.6rem;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 1.2rem;
+      background: rgba(10, 10, 8, 0.96);
+      box-shadow: 0 26px 70px -28px rgba(0, 0, 0, 0.72);
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+      transition: all 0.25s ease;
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+    }
+
+    .nav-menu.open .nav-dropdown {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .nav-dropdown a {
+      width: 100%;
+      display: block;
+      padding: 0.9rem 1rem;
+      border-radius: 0.9rem;
+      color: var(--text);
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      line-height: 1;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: all 0.2s ease;
+    }
+
+    .nav-dropdown a:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--accent-hover);
+    }
+
+
+    .cursor-dot,
+    .cursor-ring {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 100;
+      transform: translate3d(-50%, -50%, 0);
+      border-radius: 999px;
+      opacity: 0;
+      transition: opacity 180ms ease;
+    }
+
+    .cursor-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      box-shadow: 0 0 22px rgba(160, 140, 90, 0.42);
+    }
+
+    .cursor-ring {
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(160, 140, 90, 0.48);
+      box-shadow: 0 0 40px rgba(160, 140, 90, 0.12);
+    }
+
+    .cursor-visible .cursor-dot,
+    .cursor-visible .cursor-ring {
+      opacity: 1;
+    }
+
+    .paper {
+      position: relative;
+      z-index: 1;
+      width: var(--page);
+      margin: 0 auto;
+      padding: 0 0 9rem;
+    }
+
+    .site-footer {
+      position: relative;
+      z-index: 1;
+      padding: 3.25rem 2.5rem;
+      border-top: 1px solid rgba(255,255,255,0.04);
+      background: #040403;
+    }
+
+    .foot {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.65rem;
+    }
+
+    .foot-socials {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 2.5rem;
+    }
+
+    .footer-social-link {
+      color: #555;
+      transition: all 0.3s ease;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .footer-social-link svg {
+      width: 100%;
+      height: 100%;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      fill: none;
+    }
+
+    .footer-social-link:hover {
+      color: var(--accent);
+      transform: translateY(-3px);
+    }
+
+    .foot-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1.15rem;
+    }
+
+    .foot-links a {
+      color: #555;
+      font-size: 0.5rem;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      transition: color 0.25s ease;
+    }
+
+    .foot-links a:hover {
+      color: var(--accent);
+    }
+
+    .foot-copy {
+      color: #555;
+      font-size: 0.48rem;
+      font-weight: 700;
+      letter-spacing: 0.5em;
+      line-height: 1.6;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .title-page {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 9rem 0 8rem;
+      break-after: page;
+    }
+
+    .eyebrow {
+      margin: 0 0 2.6rem;
+      color: var(--accent);
+      font-family: "EB Garamond", Georgia, serif;
+      font-size: 0.98rem;
+      font-style: italic;
+      letter-spacing: 0.06em;
+    }
+
+    h1,
+    h2,
+    h3 {
+      color: var(--text);
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      line-height: 0.98;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 12ch;
+      font-size: clamp(4.25rem, 13vw, 8.7rem);
+      font-weight: 400;
+    }
+
+    .title-extension {
+      max-width: 22ch;
+      margin: 2rem 0 0;
+      color: var(--accent-hover);
+      font-family: "EB Garamond", Georgia, serif;
+      font-size: clamp(1.7rem, 4vw, 2.7rem);
+      font-style: italic;
+      line-height: 1.08;
+      letter-spacing: -0.01em;
+    }
+
+    .subtitle {
+      max-width: 28ch;
+      margin: 1.2rem 0 0;
+      color: rgba(240, 235, 224, 0.78);
+      font-family: "DM Sans", system-ui, sans-serif;
+      font-size: clamp(0.98rem, 2vw, 1.2rem);
+      font-weight: 300;
+      line-height: 1.55;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .date {
+      margin: 4.4rem 0 0;
+      color: var(--muted);
+      font-size: 0.85rem;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .abstract {
+      margin-top: 6.5rem;
+      padding-top: 2.2rem;
+      border-top: 1px solid var(--hairline);
+    }
+
+    .label {
+      margin: 0 0 1.4rem;
+      color: var(--accent);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.19em;
+      text-transform: uppercase;
+    }
+
+    .abstract p {
+      margin: 0;
+      color: rgba(240, 235, 224, 0.9);
+      font-family: "EB Garamond", Georgia, serif;
+      font-size: clamp(1.18rem, 2.3vw, 1.46rem);
+      line-height: 1.62;
+    }
+
+    section {
+      padding: 7.5rem 0 0;
+      break-inside: avoid-page;
+    }
+
+    .section-number {
+      display: block;
+      margin: 0 0 1.05rem;
+      color: var(--accent);
+      font-family: "EB Garamond", Georgia, serif;
+      font-size: 1rem;
+      font-style: italic;
+    }
+
+    h2 {
+      margin: 0 0 3.2rem;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+    }
+
+    h3 {
+      margin: 4.2rem 0 1rem;
+      color: rgba(240, 235, 224, 0.96);
+      font-size: clamp(1.75rem, 3vw, 2.45rem);
+      line-height: 1.04;
+    }
+
+    p {
+      margin: 1.05rem 0 0;
+      color: rgba(240, 235, 224, 0.78);
+    }
+
+    strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    em,
+    .var {
+      font-family: "EB Garamond", Georgia, serif;
+      font-style: italic;
+      color: rgba(240, 235, 224, 0.92);
+    }
+
+    .thesis {
+      margin: 2.2rem 0;
+      padding: 1.35rem 0 1.35rem 1.5rem;
+      border-left: 2px solid var(--accent);
+      color: var(--text);
+      font-family: "EB Garamond", Georgia, serif;
+      font-size: clamp(1.28rem, 2.4vw, 1.7rem);
+      line-height: 1.45;
+    }
+
+    .absence-grid {
+      display: grid;
+      gap: 1px;
+      margin: 2rem 0 0;
+      border: 1px solid var(--hairline);
+      border-radius: 1.25rem;
+      overflow: hidden;
+      background: var(--hairline);
+      box-shadow: 0 24px 80px var(--shadow);
+    }
+
+    .absence {
+      min-height: 8.5rem;
+      padding: 1.4rem 1.4rem 1.55rem;
+      background: rgba(8, 8, 6, 0.82);
+    }
+
+    .absence h4,
+    .field h4 {
+      margin: 0 0 0.65rem;
+      color: var(--accent-hover);
+      font-family: "EB Garamond", Georgia, serif;
+      font-size: 1.24rem;
+      font-weight: 500;
+      line-height: 1.2;
+    }
+
+    .absence p,
+    .field p {
+      margin: 0;
+      color: rgba(240, 235, 224, 0.66);
+      font-size: 0.96rem;
+      line-height: 1.66;
+    }
+
+    .math {
+      margin: 1.55rem 0;
+      padding: 1.5rem;
+      border: 1px solid var(--hairline);
+      border-radius: 1.25rem;
+      background: var(--veil);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+      overflow-x: auto;
+    }
+
+    .math pre,
+    .math code {
+      margin: 0;
+      color: rgba(240, 235, 224, 0.9);
+      font-family: "EB Garamond", Georgia, serif;
+      font-size: 1.14rem;
+      font-style: italic;
+      line-height: 1.72;
+      white-space: pre-wrap;
+    }
+
+    .field-list {
+      display: grid;
+      gap: 1px;
+      margin: 1.8rem 0 0;
+      border: 1px solid var(--hairline);
+      border-radius: 1.25rem;
+      overflow: hidden;
+      background: var(--hairline);
+    }
+
+    .field {
+      padding: 1.15rem 1.3rem 1.25rem;
+      background: rgba(8, 8, 6, 0.82);
+    }
+
+    .properties,
+    .constraints,
+    .references {
+      margin: 1.8rem 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .properties li,
+    .constraints li,
+    .references li {
+      position: relative;
+      margin: 0;
+      padding: 1rem 0 1rem 1.35rem;
+      border-top: 1px solid var(--hairline);
+      color: rgba(240, 235, 224, 0.76);
+    }
+
+    .properties li::before,
+    .constraints li::before,
+    .references li::before {
+      content: "";
+      position: absolute;
+      top: 1.78rem;
+      left: 0;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .theorem {
+      margin: 2rem 0;
+      padding: 0.2rem 0 0.2rem 1.5rem;
+      border-left: 2px solid var(--accent);
+    }
+
+    .theorem-title {
+      margin: 0 0 0.7rem;
+      color: var(--accent-hover);
+      font-family: "EB Garamond", Georgia, serif;
+      font-size: 1.34rem;
+      font-weight: 500;
+      line-height: 1.3;
+    }
+
+    .theorem p {
+      color: rgba(240, 235, 224, 0.75);
+    }
+
+    .architecture {
+      margin: 1.8rem 0 0;
+      border: 1px solid var(--hairline);
+      border-radius: 1.25rem;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(255,255,255,0.052), rgba(255,255,255,0.015));
+      box-shadow: 0 28px 90px var(--shadow);
+    }
+
+    .layer {
+      display: grid;
+      grid-template-columns: 5.5rem 1fr;
+      gap: 1rem;
+      padding: 1.25rem 1.4rem;
+      border-top: 1px solid var(--hairline);
+    }
+
+    .layer:first-child {
+      border-top: 0;
+    }
+
+    .layer-index {
+      color: var(--accent);
+      font-family: "EB Garamond", Georgia, serif;
+      font-size: 1.05rem;
+      font-style: italic;
+    }
+
+    .layer-name {
+      margin: 0;
+      color: var(--text);
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 500;
+      line-height: 1.1;
+    }
+
+    .layer p {
+      margin: 0.35rem 0 0;
+      color: rgba(240, 235, 224, 0.64);
+      font-size: 0.96rem;
+      line-height: 1.58;
+    }
+
+    .conclusion {
+      padding-bottom: 2rem;
+    }
+
+    .closing-line {
+      margin-top: 3rem;
+      color: var(--text);
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2rem, 4vw, 3.25rem);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+    }
+
+    .references {
+      counter-reset: ref;
+    }
+
+    .references li {
+      counter-increment: ref;
+      padding-left: 2.35rem;
+      font-size: 0.95rem;
+      line-height: 1.62;
+    }
+
+    .references li::before {
+      content: counter(ref);
+      top: 1rem;
+      left: 0;
+      width: 1.35rem;
+      height: 1.35rem;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(160, 140, 90, 0.45);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--accent-hover);
+      font-family: "EB Garamond", Georgia, serif;
+      font-size: 0.8rem;
+      line-height: 1;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition:
+        opacity 0.9s cubic-bezier(0.19, 1, 0.22, 1),
+        transform 0.9s cubic-bezier(0.19, 1, 0.22, 1);
+      transition-delay: var(--delay, 0ms);
+    }
+
+    .reveal.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (min-width: 760px) {
+      .absence-grid,
+      .field-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      :root {
+        --page: min(100vw - 30px, 720px);
+      }
+
+      html {
+        cursor: auto;
+      }
+
+      .cursor-dot,
+      .cursor-ring {
+        display: none;
+      }
+
+      .paper {
+        padding-bottom: 5rem;
+      }
+
+      .title-page {
+        padding: 5.5rem 0 5rem;
+      }
+
+      h1 {
+        font-size: clamp(3.45rem, 18vw, 5.4rem);
+      }
+
+      section {
+        padding-top: 5.2rem;
+      }
+
+      .layer {
+        grid-template-columns: 1fr;
+        gap: 0.25rem;
+      }
+
+      .math {
+        padding: 1.1rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      .cursor-dot,
+      .cursor-ring {
+        display: none;
+      }
+
+      .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+    }
+
+    @page {
+      size: letter;
+      margin: 0.72in;
+    }
+
+    @media print {
+      html {
+        cursor: auto;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+
+      .site-nav,
+      .site-footer,
+      body::before,
+      body::after,
+      .cursor-dot,
+      .cursor-ring {
+        display: none !important;
+      }
+
+      .paper {
+        width: 100%;
+        max-width: 720px;
+        padding-bottom: 0;
+      }
+
+      .title-page {
+        min-height: auto;
+        padding: 0.35in 0 0.6in;
+      }
+
+      h1 {
+        font-size: 58pt;
+      }
+
+      .title-extension {
+        font-size: 24pt;
+      }
+
+      .subtitle {
+        font-size: 10.5pt;
+      }
+
+      section {
+        padding-top: 0.42in;
+      }
+
+      h2 {
+        font-size: 34pt;
+      }
+
+      h3 {
+        font-size: 21pt;
+      }
+
+      p,
+      .absence p,
+      .field p,
+      .layer p,
+      .references li {
+        font-size: 10.5pt;
+      }
+
+      .reveal {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+
+      .absence-grid,
+      .architecture,
+      .math {
+        box-shadow: none;
+      }
+    }
+
+    /* ══ CONTACT MODAL ══ */
+    .modal-bg { position:fixed; inset:0; z-index:900; background:rgba(0,0,0,.9); backdrop-filter:blur(32px); display:flex; align-items:center; justify-content:center; padding:2rem; opacity:0; pointer-events:none; transition:opacity .4s; }
+    .modal-bg.open { opacity:1; pointer-events:all; }
+    .modal-box { background:var(--bg); border:1px solid var(--hairline); border-radius:2.5rem; padding:3rem; width:100%; max-width:400px; position:relative; transform:translateY(18px) scale(.97); transition:transform .4s cubic-bezier(.16,1,.3,1); }
+    .modal-bg.open .modal-box { transform:translateY(0) scale(1); }
+    .modal-x { position:absolute; top:1.5rem; right:1.5rem; width:30px; height:30px; background:rgba(255,255,255,.05); border:none; border-radius:50%; color:var(--muted); font-size:.75rem; display:flex; align-items:center; justify-content:center; transition:all .2s; cursor:pointer; }
+    .modal-x:hover { background:rgba(255,255,255,.1); color:var(--text); }
+    .modal-eyebrow { font-size:.6rem; letter-spacing:.35em; text-transform:uppercase; font-weight:600; color:var(--accent); margin-bottom:.75rem; }
+    .modal-title { font-family:'Cormorant Garamond',serif; font-size:2.2rem; font-weight:400; color:var(--text); line-height:1.2; margin-bottom:2rem; }
+    .field { width:100%; display:block; background:rgba(255,255,255,.04); border:1px solid var(--hairline); border-radius:1.25rem; padding:.9rem 1.2rem; color:var(--text); font-family:'DM Sans',sans-serif; font-size:.9rem; outline:none; transition:border-color .3s; margin-bottom:.7rem; }
+    .field:focus { border-color:var(--accent); }
+    .field::placeholder { color:var(--muted); }
+    .btn-submit { width:100%; margin-top:.25rem; padding:.9rem; background:var(--text); color:var(--bg); border:none; border-radius:1.25rem; font-family:'DM Sans',sans-serif; font-size:.58rem; font-weight:700; letter-spacing:.22em; text-transform:uppercase; transition:all .3s; cursor:pointer; }
+    .btn-submit:hover { background:var(--accent); color:white; }
+    .btn-submit:disabled { opacity:.5; }
+    .modal-ok { text-align:center; padding:2rem 0; }
+    .modal-ok-icon { width:52px; height:52px; border-radius:50%; border:1px solid var(--hairline); display:flex; align-items:center; justify-content:center; margin:0 auto 1.25rem; color:var(--accent); }
+    .modal-ok-title { font-family:'Cormorant Garamond',serif; font-size:2rem; color:var(--text); margin-bottom:.6rem; }
+    .modal-ok-sub { font-size:.85rem; color:var(--muted); font-weight:300; }
+    .hidden { display:none !important; }
+
+    .nav-dropdown button {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.9rem 1rem;
+      border-radius: 0.9rem;
+      border: none;
+      background: none;
+      color: var(--text);
+      font-size: 0.58rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      line-height: 1;
+      text-transform: uppercase;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      text-align: left;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .nav-dropdown button:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--accent-hover);
+    }
+    .nav-dropdown button i {
+      width: 14px;
+      text-align: center;
+      font-size: 0.72rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="cursor-dot" aria-hidden="true"></div>
+  <div class="cursor-ring" aria-hidden="true"></div>
+
+  <nav class="site-nav">
+    <div class="nav-logo"><a href="index.html">WHY<em>.</em></a></div>
+    <div class="nav-menu" id="navMenu">
+      <button class="nav-menu-btn" type="button" aria-label="Open menu" aria-expanded="false" onclick="toggleNavMenu()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+      <div class="nav-dropdown">
+        <a href="ai.html">AI</a>
+        <a href="about.html">About</a>
+        <a href="app.html">Desktop</a>
+        <a href="https://discord.gg/raAQCeDr3e" target="_blank" rel="noopener">Discord</a>
+        <a href="research.html">Research</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="paper">
+    <header class="title-page">
+      <p class="eyebrow reveal">WP-02 · Next-Question Ranking</p>
+      <h1 class="reveal" style="--delay: 80ms">A Prudent Question</h1>
+      <p class="title-extension reveal" style="--delay: 160ms">Teaching machines what to question next</p>
+      <p class="subtitle reveal" style="--delay: 240ms">Bounded choice, expected information gain, and the Curiosity Graph</p>
+      <p class="date reveal" style="--delay: 320ms">August 2026</p>
+
+      <div class="abstract reveal" style="--delay: 400ms">
+        <p class="label">Abstract</p>
+        <p>Language models are trained to answer assigned problems. WHY studies the decision before the next problem is assigned: what deserves investigation now? A bounded slate turns ordinary exploration into comparative evidence. One option is pursued; two visible alternatives are left behind. WHY Pro is designed to add explicit expert judgments about what should be investigated next. WP-02 asks whether those signals can train a ranking layer that learns faster than likelihood alone, transfers across people and subjects, and improves what users discover. The deployed product is the baseline. The expert corpus and learned selector remain a falsifiable research program. <a href="whitepaper.pdf" target="_blank" rel="noopener" style="color:#c4aa72;text-decoration:underline;text-underline-offset:.2em;">Read the complete whitepaper.</a></p>
+      </div>
+    </header>
+
+    <section id="instrument" class="reveal">
+      <span class="section-number">1</span>
+      <h2>The Instrument</h2>
+
+      <h3>1.1 One Answer, Three Questions</h3>
+      <p>For each question, WHY returns one compact answer and exactly three possible directions. The interface deliberately bounds the choice set: the user can select one question or leave.</p>
+      <p class="thesis">Experts teach machines how to solve problems. WHY studies how to teach machines what to question next.</p>
+
+      <div class="absence-grid">
+        <article class="absence reveal">
+          <h4>Chosen</h4>
+          <p>The direction a person actively pursues from the current answer and context.</p>
+        </article>
+        <article class="absence reveal">
+          <h4>Not selected</h4>
+          <p>The two alternatives presented beside the choice. Exposure is observable; conscious rejection is not assumed.</p>
+        </article>
+        <article class="absence reveal">
+          <h4>Outside option</h4>
+          <p>A rendered slate that receives no selection. It must be measured separately from a visitor who leaves before seeing one.</p>
+        </article>
+        <article class="absence reveal">
+          <h4>Consequence</h4>
+          <p>Whether the selected path loaded, continued, deepened, corrected an answer, or brought the person back.</p>
+        </article>
+      </div>
+
+      <h3>1.2 Why the Alternatives Matter</h3>
+      <p>A selection without its choice set cannot explain what won. The unselected questions are not treated as independent votes or proof that they were read. They are the contemporaneous alternatives needed to evaluate the choice comparatively.</p>
+      <p>Consumer paths reveal where unprompted curiosity goes. A separate, explicit WHY Pro cohort is intended to evaluate where disciplined investigation should go. The research question is whether the difference between those signals improves training and evaluation—not whether popularity can substitute for expertise.</p>
+      <div class="math reveal">
+        <pre>observation = (context, slate, order, selection | outside option, consequence)</pre>
+      </div>
+    </section>
+
+    <section id="method" class="reveal">
+      <span class="section-number">2</span>
+      <h2>The Method</h2>
+
+      <h3>2.1 Generate, Validate, Select</h3>
+      <div class="architecture reveal">
+        <div class="layer">
+          <span class="layer-index">Layer 4</span>
+          <div>
+            <p class="layer-name">Learn</p>
+            <p>Update the ranking model from exposure, selection, continuation, depth, return, and correction.</p>
+          </div>
+        </div>
+        <div class="layer">
+          <span class="layer-index">Layer 3</span>
+          <div>
+            <p class="layer-name">Select the Slate</p>
+            <p>Score every feasible three-question board and keep the one with the greatest expected learning value.</p>
+          </div>
+        </div>
+        <div class="layer">
+          <span class="layer-index">Layer 2</span>
+          <div>
+            <p class="layer-name">Validate</p>
+            <p>Require answer anchoring, relevance, novelty, factual support, and meaningful distance between questions.</p>
+          </div>
+        </div>
+        <div class="layer">
+          <span class="layer-index">Layer 1</span>
+          <div>
+            <p class="layer-name">Generate Candidates</p>
+            <p>Ask a foundation model for more possible questions than the three the interface can show.</p>
+          </div>
+        </div>
+      </div>
+
+      <h3>2.2 The Selection Objective</h3>
+      <p>Choosing the three most likely questions can maximize immediate selection while teaching the system very little. Maximizing choice entropy also fails: it cannot distinguish useful uncertainty from genuine indifference and may reward three confusing near-equals.</p>
+      <p>WP-02 therefore proposes expected information gain: select a slate whose surviving preference hypotheses would rank differently, subject to hard quality constraints.</p>
+      <div class="math reveal">
+        <pre>S* = argmax I(parameters ; outcome | S, context, history)
+
+subject to:
+  every question clears a relevance floor
+  the questions are not redundant
+  at least one direction meaningfully diverges
+  a deterministic fallback always returns a usable board</pre>
+      </div>
+      <p>With twelve valid candidates, WHY can evaluate all <span class="var">C(12,3) = 220</span> possible boards. The combinatorics are small enough to exhaust rather than approximate.</p>
+
+      <h3>2.3 Curiosity Graph and Rejection Signal</h3>
+      <p>The <strong>Curiosity Graph</strong> is the complete network of canonical questions and paths. The <strong>rejection signal</strong> is the comparative evidence inside it: which presented alternatives repeatedly lose to which selected directions, in what context and position.</p>
+      <p>Keeping the names separate matters. The graph represents the system. Rejection describes one potentially distinctive signal—not a claim that every unselected question was consciously read and refused.</p>
+    </section>
+
+    <section id="status" class="reveal">
+      <span class="section-number">3</span>
+      <h2>What Exists Today</h2>
+
+      <h3>3.1 The Live Baseline</h3>
+      <p>Why.com already provides the instrument: one concise answer, three validated questions, stable directional roles, path-aware context, local curiosity memory, and outcome telemetry. The current production system selects three questions directly; it does not yet maintain the posterior or population-level Curiosity Graph proposed by WP-02.</p>
+
+      <div class="absence-grid">
+        <article class="absence reveal">
+          <h4>Live</h4>
+          <p>Candidate generation, factual and semantic validation, three-question presentation, path continuity, and local selected-versus-unselected outcomes.</p>
+        </article>
+        <article class="absence reveal">
+          <h4>Instrument next</h4>
+          <p>Qualified slate exposure, outside-option measurement, randomized research cohorts, policy version, and reliable selection consequences.</p>
+        </article>
+        <article class="absence reveal">
+          <h4>Research build</h4>
+          <p>A larger candidate pool, posterior preference model, exhaustive slate selector, and calibrated uncertainty estimates.</p>
+        </article>
+        <article class="absence reveal">
+          <h4>Graph build</h4>
+          <p>Canonical question identities, exposure-corrected population edges, personal residuals, and privacy-preserving aggregation.</p>
+        </article>
+      </div>
+
+      <h3>3.2 One Platform, Separate Evidence</h3>
+      <p><strong>Why.com</strong> is the consumer instrument for authentic curiosity paths. <strong>WHY Pro</strong> is the proposed opt-in expert instrument for deliberate next-question judgment. <strong>WHY AI</strong> is the generation, validation, and ranking layer. <strong>WP-02</strong> tests whether those sources improve learned selection. <strong>WHY Desktop</strong> is the private personal layer; its memory is not population training data by default.</p>
+    </section>
+
+    <section id="evaluation" class="reveal">
+      <span class="section-number">4</span>
+      <h2>What Would Prove It</h2>
+
+      <h3>4.1 Pre-Declared Tests</h3>
+      <ul class="constraints reveal">
+        <li><strong>Information:</strong> Does the proposed selector reduce posterior uncertainty more per turn than a likelihood-ranked baseline?</li>
+        <li><strong>Learning:</strong> Does it predict held-out selections with fewer observations?</li>
+        <li><strong>Transfer:</strong> Does the learned signal improve prediction for unseen people and unseen subjects?</li>
+        <li><strong>Outcome:</strong> Do better-ranked questions improve discovery, correction, completion, or accepted work—not merely clicks?</li>
+        <li><strong>Persistence:</strong> At matched sample size, do unselected alternatives predict distal choices better than selected questions alone?</li>
+      </ul>
+
+      <h3>4.2 The Result That Would Matter</h3>
+      <p>The strongest result would not be that WHY predicts the next click. It would be that comparative evidence from bounded question slates improves what people discover later—and that the effect transfers beyond the user or subject that produced it.</p>
+      <div class="theorem reveal">
+        <p class="theorem-title">The moat test</p>
+        <p>If the learned signal does not transfer across people or subjects, the Curiosity Graph is a personalization feature rather than a population-level asset.</p>
+      </div>
+    </section>
+
+    <section id="limits" class="reveal">
+      <span class="section-number">5</span>
+      <h2>Limits and Obligations</h2>
+
+      <h3>5.1 Measurement Before Mythology</h3>
+      <p>A displayed question is not necessarily a read question. An unselected question is not necessarily a conscious rejection. A visitor who leaves before a slate renders is not an outside-option observation. The research must record these states separately.</p>
+
+      <h3>5.2 Generation Bounds Discovery</h3>
+      <p>The system can only learn among possibilities its generator imagines. A divergence requirement helps, but cannot reveal an entire direction that was never generated. Generator diversity and reserved exploration must therefore be measured rather than assumed.</p>
+
+      <h3>5.3 Ranking Can Narrow the World</h3>
+      <p>A globally popular question can receive more exposure, win more comparisons, and become still more visible. Position randomization, logged propensities, bounded population influence, and graph-entropy monitoring are required to prevent a rich-get-richer loop from becoming a curiosity monoculture.</p>
+
+      <h3>5.4 Rejection Is Sensitive</h3>
+      <p>Patterns of avoidance may reveal more than selections. Personal decline histories should remain private by default; aggregation requires clear consent, minimum cohort protections, and no raw personal path attached to a population edge.</p>
+    </section>
+
+    <section id="conclusion" class="conclusion reveal">
+      <span class="section-number">6</span>
+      <h2>Conclusion</h2>
+      <p>Experts teach machines how to solve assigned problems. WHY is building the questioning layer: a system for learning which problem deserves attention next.</p>
+      <p>WP-02 does not claim that the learned system is complete. It defines the instrument, the proposed selector, the evidence required, and the observations that would prove the thesis wrong.</p>
+      <p class="closing-line">AI learned how to answer. WHY is testing how to teach it what to question next.</p>
+      <p><a href="whitepaper.pdf" target="_blank" rel="noopener" style="color:#c4aa72;text-decoration:underline;text-underline-offset:.2em;">Read WP-02: A Prudent Question Is One-Half of Wisdom.</a></p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="foot">
+      <div class="foot-socials">
+        <a href="https://x.com/whydots" target="_blank" rel="noopener" class="footer-social-link" aria-label="X @whydots"><svg viewBox="0 0 24 24"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg></a>
+        <a href="https://github.com/whyagents" target="_blank" rel="noopener" class="footer-social-link" aria-label="GitHub"><svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77 5.44 5.44 0 0 0 3.5 8.5c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
+        <a href="https://discord.gg/raAQCeDr3e" target="_blank" rel="noopener" class="footer-social-link" aria-label="Discord"><svg viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"></path></svg></a>
+        <a href="https://t.me/whydotcom" target="_blank" rel="noopener" class="footer-social-link" aria-label="Telegram"><svg viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"></path></svg></a>
+      </div>
+      <div class="foot-links">
+        <a href="privacy.html">Privacy &amp; Cookies</a>
+        <a href="terms.html">Terms &amp; Conditions</a>
+        <button class="why-consent-trigger" type="button" data-why-consent-open>Privacy choices</button>
+      </div>
+      <div class="foot-copy">© 2026 Ockams, Inc. Designed in California.</div>
+    </div>
+  </footer>
+
+  <!-- LAUNCH MODAL -->
+  <div id="launch-modal" class="modal-bg">
+    <div class="modal-box">
+      <button class="modal-x" onclick="closeLaunchModal()"><i class="fas fa-times"></i></button>
+      <div id="launch-modal-message">
+        <p class="modal-eyebrow">Launch</p>
+        <h2 class="modal-title">WHY.</h2>
+        <p class="modal-ok-sub">Coming soon.</p>
+      </div>
+      <div id="launch-modal-ok" class="modal-ok hidden">
+        <div class="modal-ok-icon"><i class="fas fa-check"></i></div>
+        <div class="modal-ok-title">Coming soon.</div>
+        <p class="modal-ok-sub">WHY.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openLaunchModal()  { document.getElementById('launch-modal').classList.add('open'); }
+    function closeLaunchModal() { document.getElementById('launch-modal').classList.remove('open'); }
+
+    document.getElementById('launch-modal').addEventListener('click', e => { if (e.target.id==='launch-modal') closeLaunchModal(); });
+
+    function toggleNavMenu() {
+      const menu = document.getElementById("navMenu");
+      if (!menu) return;
+      const isOpen = menu.classList.toggle("open");
+      const btn = menu.querySelector(".nav-menu-btn");
+      if (btn) btn.setAttribute("aria-expanded", String(isOpen));
+    }
+
+    function closeNavMenu() {
+      const menu = document.getElementById("navMenu");
+      if (!menu) return;
+      menu.classList.remove("open");
+      const btn = menu.querySelector(".nav-menu-btn");
+      if (btn) btn.setAttribute("aria-expanded", "false");
+    }
+
+    document.addEventListener("click", (event) => {
+      const menu = document.getElementById("navMenu");
+      if (menu && !menu.contains(event.target)) closeNavMenu();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") { closeLaunchModal(); closeNavMenu(); }
+    });
+
+    (() => {
+      const root = document.documentElement;
+      const dot = document.querySelector(".cursor-dot");
+      const ring = document.querySelector(".cursor-ring");
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      if (!reducedMotion && dot && ring && window.matchMedia("(pointer: fine)").matches) {
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let ringX = mouseX;
+        let ringY = mouseY;
+
+        window.addEventListener("pointermove", (event) => {
+          mouseX = event.clientX;
+          mouseY = event.clientY;
+          root.classList.add("cursor-visible");
+          dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate3d(-50%, -50%, 0)`;
+        }, { passive: true });
+
+        window.addEventListener("pointerleave", () => {
+          root.classList.remove("cursor-visible");
+        });
+
+        const animate = () => {
+          ringX += (mouseX - ringX) * 0.12;
+          ringY += (mouseY - ringY) * 0.12;
+          ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate3d(-50%, -50%, 0)`;
+          requestAnimationFrame(animate);
+        };
+        animate();
+      }
+
+      const revealTargets = Array.from(document.querySelectorAll(".reveal"));
+      revealTargets.forEach((target, index) => {
+        if (target.classList.contains("math")) {
+          target.style.setProperty("--delay", `${Math.min(index * 15, 150)}ms`);
+        }
+      });
+
+      if (reducedMotion || !("IntersectionObserver" in window)) {
+        revealTargets.forEach((target) => target.classList.add("in"));
+        return;
+      }
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("in");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        root: null,
+        threshold: 0.12,
+        rootMargin: "0px 0px -8% 0px"
+      });
+
+      revealTargets.forEach((target) => observer.observe(target));
+    })();
+
+  </script>
+</body>
+</html>

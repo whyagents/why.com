@@ -1,0 +1,197 @@
+/* WHY's Cookiebot surface: a quiet footer veil instead of a blocking modal. */
+#CybotCookiebotDialog,
+#CybotCookiebotDialogBodyUnderlay,
+#CookiebotWidget,
+#CookiebotWidget-scannerDialog {
+  display: none !important;
+}
+
+.why-consent-veil {
+  position: fixed;
+  z-index: 2147483000;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 7px max(14px, env(safe-area-inset-right, 0px))
+    calc(7px + env(safe-area-inset-bottom, 0px))
+    max(14px, env(safe-area-inset-left, 0px));
+  border-top: 1px solid rgba(196, 170, 114, .24);
+  background: rgba(8, 8, 6, .84);
+  box-shadow: 0 -18px 54px rgba(0, 0, 0, .2);
+  color: #f0ebe0;
+  font-family: "DM Sans", system-ui, sans-serif;
+  -webkit-backdrop-filter: blur(22px) saturate(1.12);
+  backdrop-filter: blur(22px) saturate(1.12);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .28s ease, transform .28s ease;
+}
+
+.why-consent-veil[hidden] { display: none !important; }
+.why-consent-veil.is-visible { opacity: 1; transform: translateY(0); }
+
+.why-consent-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  width: min(1180px, 100%);
+  min-height: 34px;
+  margin: 0 auto;
+}
+
+.why-consent-copy {
+  display: flex;
+  align-items: baseline;
+  min-width: 0;
+  gap: 8px;
+  color: rgba(240, 235, 224, .72);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: .01em;
+  line-height: 1.25;
+}
+
+.why-consent-mark {
+  flex: 0 0 auto;
+  color: #f0ebe0;
+  font-family: "Cormorant Garamond", "EB Garamond", Georgia, serif;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: .05em;
+  line-height: 1;
+}
+
+.why-consent-mark em { color: #a08c5a; font-style: normal; }
+.why-consent-copy a { color: #a08c5a; text-decoration: none; white-space: nowrap; }
+.why-consent-copy a:hover { color: #c4aa72; }
+
+.why-consent-actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 6px;
+}
+
+.why-consent-button,
+.why-consent-save {
+  min-height: 30px;
+  padding: 5px 10px;
+  border: 1px solid rgba(240, 235, 224, .18);
+  border-radius: 999px;
+  color: rgba(240, 235, 224, .82);
+  background: rgba(255, 255, 255, .025);
+  font: 600 9px/1 "DM Sans", system-ui, sans-serif;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color .2s ease, color .2s ease, background .2s ease;
+}
+
+.why-consent-button:hover,
+.why-consent-save:hover {
+  border-color: rgba(196, 170, 114, .7);
+  color: #f0ebe0;
+  background: rgba(160, 140, 90, .1);
+}
+
+.why-consent-button[data-why-consent="allow"] {
+  border-color: rgba(160, 140, 90, .48);
+  color: #c4aa72;
+}
+
+.why-consent-options {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: min(1180px, 100%);
+  max-height: 0;
+  margin: 0 auto;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height .25s ease, padding-top .25s ease, opacity .2s ease;
+}
+
+.why-consent-veil.is-choosing .why-consent-options {
+  max-height: 54px;
+  padding-top: 7px;
+  opacity: 1;
+}
+
+.why-consent-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: rgba(240, 235, 224, .72);
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.why-consent-option input {
+  width: 14px;
+  height: 14px;
+  accent-color: #a08c5a;
+}
+
+.why-consent-gpc {
+  color: #8b857a;
+  font-size: 9px;
+  font-style: italic;
+}
+
+.why-consent-trigger {
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: none;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+}
+
+.why-consent-trigger:hover { color: #c4aa72; }
+
+.foot-links .why-consent-trigger {
+  color: #666;
+  font-size: .5rem;
+  font-weight: 700;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 700px) {
+  .why-consent-veil {
+    padding-top: 9px;
+    padding-bottom: calc(9px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .why-consent-row {
+    flex-wrap: wrap;
+    gap: 7px 10px;
+  }
+
+  .why-consent-copy {
+    justify-content: center;
+    width: 100%;
+    font-size: 10px;
+    text-align: center;
+  }
+
+  .why-consent-actions { justify-content: center; }
+  .why-consent-button, .why-consent-save { min-height: 32px; padding-inline: 9px; }
+
+  .why-consent-options {
+    flex-wrap: wrap;
+    gap: 8px 13px;
+  }
+
+  .why-consent-veil.is-choosing .why-consent-options { max-height: 84px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .why-consent-veil,
+  .why-consent-options { transition: none; }
+}

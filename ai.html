@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="WHY is building the questioning layer for AI. People reveal where curiosity goes; experts show where intelligence should go; WHY learns from the difference.">
+<meta property="og:title" content="WHY AI — The Next-Question Layer">
+<meta property="og:description" content="AI learned how to answer. WHY is teaching it what to question next.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="WHY">
+<title>AI - WHY</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A7%A0%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+    font-family:"DM Sans",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    background:#fff;
+    color:#1d1d1f;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+}
+a{color:inherit;text-decoration:none}
+nav{
+    position:sticky;
+    top:0;
+    z-index:100;
+    background:rgba(255,255,255,.82);
+    border-bottom:1px solid rgba(0,0,0,.06);
+    backdrop-filter:saturate(180%) blur(20px);
+    -webkit-backdrop-filter:saturate(180%) blur(20px);
+}
+.nav-inner{
+    max-width:1024px;
+    height:44px;
+    margin:0 auto;
+    padding:0 22px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+.logo{
+    font-family:"Cormorant Garamond",serif;
+    font-size:24px;
+    font-weight:600;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+}
+.logo span{color:#a08c5a}
+.ic{display:block;flex:0 0 auto;width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.ic-solid{fill:currentColor;stroke:none}
+.nav-menu{position:relative}
+.nav-menu-btn{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border:1px solid rgba(0,0,0,.13);border-radius:999px;color:#1d1d1f;background:transparent;transition:all .3s}
+.nav-menu-btn:hover{border-color:#1d1d1f;color:#fff;background:#1d1d1f}
+.nav-menu-btn .ic{width:17px;height:17px}
+.nav-dropdown{position:absolute;top:calc(100% + .9rem);right:0;min-width:232px;padding:.6rem;border:1px solid rgba(255,255,255,.08);border-radius:1.2rem;background:rgba(10,10,8,.96);box-shadow:0 26px 70px -28px rgba(0,0,0,.72);opacity:0;pointer-events:none;transform:translateY(8px);transition:all .25s ease}
+.nav-menu.open .nav-dropdown{opacity:1;pointer-events:auto;transform:translateY(0)}
+.nav-dropdown a{display:block;width:100%;padding:.9rem 1rem;border:0;border-radius:.9rem;color:#f0ebe0;background:none;font-size:.68rem;font-weight:600;letter-spacing:.22em;text-align:left;text-transform:uppercase;transition:all .2s}
+.nav-dropdown a:hover{color:#c4aa72;background:rgba(255,255,255,.06)}
+section{padding:112px 20px}
+#hero{
+    padding:110px 20px 0;
+    text-align:center;
+    overflow:hidden;
+}
+.hero-title{
+    font-family:"Cormorant Garamond",serif;
+    font-size:clamp(48px,8.25vw,102px);
+    font-weight:600;
+    letter-spacing:-.05em;
+    line-height:.82;
+    margin-bottom:24px;
+}
+.hero-sub{
+    font-size:clamp(20px,2.6vw,28px);
+    line-height:1.25;
+    color:#86868b;
+    font-weight:300;
+    max-width:720px;
+    margin:0 auto 46px;
+}
+.hero-ctas{
+    display:flex;
+    gap:16px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-bottom:76px;
+}
+.btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:14px 28px;
+    border-radius:980px;
+    font-size:17px;
+    font-weight:500;
+    border:1px solid #d2d2d7;
+    transition:all .3s cubic-bezier(.2,.8,.2,1);
+}
+.btn:hover{transform:scale(1.02);border-color:#1d1d1f}
+.btn-primary{background:#1d1d1f;color:#fff;border-color:#1d1d1f}
+.btn-primary:hover{background:#000}
+.brain-wrap{
+    width:min(1040px,100%);
+    margin:0 auto;
+    padding:12px;
+    border-radius:36px 36px 0 0;
+    background:linear-gradient(180deg,#f5f5f7,#fff);
+    border:1px solid rgba(0,0,0,.07);
+    border-bottom:none;
+    box-shadow:0 44px 90px rgba(0,0,0,.08);
+}
+.brain-panel{
+    min-height:430px;
+    border-radius:28px 28px 0 0;
+    background:
+        radial-gradient(circle at 52% 44%,rgba(196,170,114,.16),transparent 22%),
+        radial-gradient(circle at 35% 55%,rgba(160,140,90,.15),transparent 25%),
+        linear-gradient(180deg,#fff,#f8f8fa);
+    border:1px solid rgba(0,0,0,.06);
+    position:relative;
+    overflow:hidden;
+}
+.brain-panel::before{
+    content:"";
+    position:absolute;
+    inset:42px;
+    border-radius:42% 58% 54% 46% / 46% 48% 52% 54%;
+    border:1px solid rgba(0,0,0,.08);
+    background:
+        linear-gradient(90deg,transparent calc(50% - 1px),rgba(0,0,0,.08) calc(50% - 1px),rgba(0,0,0,.08) calc(50% + 1px),transparent calc(50% + 1px)),
+        repeating-radial-gradient(circle at 50% 50%,rgba(0,0,0,.04) 0 1px,transparent 1px 19px);
+}
+.brain-core{
+    position:absolute;
+    inset:auto 0 48px;
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
+}
+.chip{
+    background:#fff;
+    border:1px solid rgba(0,0,0,.08);
+    border-radius:999px;
+    padding:10px 16px;
+    color:#6e6e73;
+    font-size:13px;
+    box-shadow:0 10px 24px rgba(0,0,0,.05);
+}
+#why{
+    background:#fbfbfd;
+    text-align:center;
+}
+.section-label{
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:#86868b;
+    margin-bottom:22px;
+}
+.headline{
+    font-family:"Cormorant Garamond",serif;
+    font-size:clamp(42px,6vw,76px);
+    line-height:.94;
+    letter-spacing:-.04em;
+    font-weight:600;
+    max-width:780px;
+    margin:0 auto 24px;
+}
+.body{
+    font-size:19px;
+    line-height:1.6;
+    color:#86868b;
+    max-width:720px;
+    margin:0 auto;
+}
+.features{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+    max-width:1120px;
+    margin:56px auto 0;
+}
+.card{
+    background:#fff;
+    border:1px solid rgba(0,0,0,.06);
+    border-radius:28px;
+    padding:38px 32px;
+    min-height:290px;
+    text-align:left;
+    box-shadow:0 18px 45px rgba(0,0,0,.045);
+}
+.card-icon{
+    width:44px;
+    height:44px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background:#f5f5f7;
+    margin-bottom:38px;
+    font-size:22px;
+}
+.card h3{
+    font-family:"Cormorant Garamond",serif;
+    font-size:34px;
+    line-height:1;
+    letter-spacing:-.03em;
+    margin-bottom:14px;
+}
+.card p{
+    font-size:17px;
+    line-height:1.55;
+    color:#86868b;
+}
+#product{
+    background:#111;
+    color:#f5f5f7;
+    text-align:center;
+}
+#product .section-label{color:#a08c5a}
+#product .body{color:#aaa}
+.product-grid{
+    max-width:980px;
+    margin:58px auto 0;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+}
+.product-item{
+    min-height:230px;
+    border:1px solid rgba(255,255,255,.09);
+    border-radius:28px;
+    padding:34px;
+    background:rgba(255,255,255,.045);
+    text-align:left;
+}
+.product-item span{
+    display:block;
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:#a08c5a;
+    margin-bottom:44px;
+}
+.product-item h3{
+    font-family:"Cormorant Garamond",serif;
+    font-size:34px;
+    line-height:1;
+    letter-spacing:-.03em;
+    margin-bottom:14px;
+}
+.product-item p{
+    color:#aaa;
+    font-size:16px;
+    line-height:1.6;
+}
+#simple{
+    text-align:center;
+}
+.steps{
+    max-width:920px;
+    margin:54px auto 0;
+    border:1px solid rgba(0,0,0,.08);
+    border-radius:30px;
+    overflow:hidden;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+}
+.step{
+    padding:28px;
+    min-height:220px;
+    border-right:1px solid rgba(0,0,0,.08);
+    text-align:left;
+}
+.step:last-child{border-right:none}
+.step span{
+    display:block;
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:.2em;
+    /* Darker sibling of --gold (#a08c5a). At 12px this is body text for
+       contrast purposes; #a08c5a hits only 3.28:1 on white, #8a7340 clears
+       4.5:1. The display-size punctuation elsewhere uses #a08c5a directly. */
+    color:#8a7340;
+    margin-bottom:48px;
+}
+.step h3{
+    font-family:"Cormorant Garamond",serif;
+    font-size:30px;
+    letter-spacing:-.03em;
+    margin-bottom:10px;
+}
+.step p{
+    color:#86868b;
+    font-size:15px;
+    line-height:1.55;
+}
+#final{
+    background:#fbfbfd;
+    text-align:center;
+}
+.final-headline{
+    font-family:"Cormorant Garamond",serif;
+    font-size:clamp(46px,6.5vw,84px);
+    line-height:.96;
+    letter-spacing:-.04em;
+    font-weight:600;
+    margin-bottom:24px;
+}
+.final-meta{
+    color:#86868b;
+    font-size:14px;
+    margin-top:24px;
+}
+footer{
+    padding:40px 20px;
+    text-align:center;
+    border-top:1px solid rgba(0,0,0,.06);
+    color:#86868b;
+    font-size:12px;
+}
+@media(max-width:900px){
+    .features,.product-grid,.steps{grid-template-columns:1fr}
+    .step{border-right:none;border-bottom:1px solid rgba(0,0,0,.08)}
+    .step:last-child{border-bottom:none}
+    .brain-panel{min-height:360px}
+}
+</style>
+</head>
+<body>
+<nav>
+<div class="nav-inner">
+<a class="logo" href="index.html">WHY<span>.</span></a>
+<div class="nav-menu" id="navMenu">
+<button class="nav-menu-btn" type="button" aria-label="Open menu" aria-expanded="false" onclick="toggleNavMenu()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+<div class="nav-dropdown">
+<a href="ai.html">AI</a>
+<a href="about.html">About</a>
+<a href="app.html">Desktop</a>
+<a href="https://discord.gg/raAQCeDr3e" target="_blank" rel="noopener">Discord</a>
+<a href="research.html">Research</a>
+</div>
+</div>
+</div>
+</nav>
+
+<main>
+<section id="hero">
+<h1 class="hero-title">AI learned to answer.<br/>WHY teaches it to question<span style="color:#a08c5a;font-size:.6em;">.</span></h1>
+<p class="hero-sub">WHY is the questioning layer between a model answer and the next human decision.</p>
+<div class="hero-ctas">
+<a class="btn btn-primary" href="whitepaper.pdf" target="_blank" rel="noopener">Read Whitepaper</a>
+<a class="btn" href="#product">See the system</a>
+</div>
+<div class="brain-wrap">
+<div class="brain-panel">
+<div class="brain-core">
+<div class="chip">Generate</div>
+<div class="chip">Validate</div>
+<div class="chip">Compare</div>
+<div class="chip">Select</div>
+<div class="chip">Learn</div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="why">
+<div class="section-label">The missing layer</div>
+<h2 class="headline">Reasoning starts after<br/>the question<span style="color:#a08c5a;">.</span></h2>
+<p class="body">Experts help models solve assigned problems. WHY studies the decision before that work begins: which possibility deserves investigation next? It turns open-ended generation into a bounded, observable choice.</p>
+<div class="features">
+<div class="card">
+<div class="card-icon">◐</div>
+<h3>Generate broadly.</h3>
+<p>The model proposes more directions than the interface needs. Generation supplies possibilities; it does not get the final vote.</p>
+</div>
+<div class="card">
+<div class="card-icon">⌁</div>
+<h3>Compose deliberately.</h3>
+<p>Weak, repetitive, unsupported, and already-covered questions are removed. The final three must each make a different promise about what the user will discover.</p>
+</div>
+<div class="card">
+<div class="card-icon">✓</div>
+<h3>Learn comparatively.</h3>
+<p>Every selection has context: the two visible alternatives beside it and the path that follows. That comparison is the signal—not a claim that every unselected question was consciously rejected.</p>
+</div>
+</div>
+</section>
+
+<section id="product">
+<div class="section-label">One platform. Four signals.</div>
+<h2 class="headline">Curiosity becomes intelligence<span style="color:#a08c5a;">.</span></h2>
+<p class="body">Free users reveal where authentic curiosity wants to go. WHY Pro is designed to add expert judgment about where intelligence should go. Research tests whether the difference can improve how AI systems choose their next question—and become useful training data, reward models, and private evaluations for AI labs.</p>
+<div class="product-grid">
+<div class="product-item">
+<span>Live now</span>
+<h3>Human curiosity.</h3>
+<p>Why.com presents one answer and three validated directions, recording the choice set, selected path, and what happens next.</p>
+</div>
+<div class="product-item">
+<span>In development</span>
+<h3>Expert judgment.</h3>
+<p>WHY Pro is assembling explicit evaluations of what should be investigated, challenged, clarified, or decomposed next.</p>
+</div>
+<div class="product-item">
+<span>Private layer</span>
+<h3>Personal direction.</h3>
+<p>WHY Desktop keeps a private Curiosity Graph under user control, carrying forward only the context that can improve the next decision.</p>
+</div>
+<div class="product-item">
+<span>Research program</span>
+<h3>Machine questioning.</h3>
+<p>WP-02 tests whether comparative paths can become training data, reward signals, and evaluations for systems that must decide what to ask next.</p>
+</div>
+</div>
+</section>
+
+<section id="simple">
+<div class="section-label">The operating loop</div>
+<h2 class="headline">One answer.<br/>Three questions worth choosing between<span style="color:#a08c5a;">.</span></h2>
+<p class="body">The architecture is easier to understand as a loop: create possibilities, enforce quality, compose the slate, and learn from what happens next.</p>
+<div class="steps">
+<div class="step">
+<span>01</span>
+<h3>Generate</h3>
+<p>Produce candidate questions anchored to concrete details and unresolved gaps in the answer.</p>
+</div>
+<div class="step">
+<span>02</span>
+<h3>Validate</h3>
+<p>Reject unsupported, repetitive, irrelevant, or already-covered directions before they reach the user.</p>
+</div>
+<div class="step">
+<span>03</span>
+<h3>Compose</h3>
+<p>Select three questions that are individually compelling and collectively difficult to ignore.</p>
+</div>
+<div class="step">
+<span>04</span>
+<h3>Learn</h3>
+<p>Use exposure, selection, continuation, depth, and return to improve future ranking without weakening truth.</p>
+</div>
+</div>
+</section>
+
+<section id="final">
+<h2 class="final-headline"><em>WHY Research</em><span style="color:#a08c5a;">.</span></h2>
+<p class="body">The model can change. The durable layer is the system that observes competing possibilities, measures what follows, and learns which questions deserve attention next.</p>
+<div class="hero-ctas" style="margin:36px 0 0">
+<a class="btn" href="research.html">Explore the research</a>
+</div>
+<p class="final-meta">Curiosity in public. Judgment from experts. Memory in private.</p>
+</section>
+</main>
+
+<footer>
+WHY AI. The next-question layer. <a href="privacy.html">Privacy</a>
+</footer>
+<script>
+function toggleNavMenu(){
+  const menu=document.getElementById('navMenu');
+  if(!menu)return;
+  const isOpen=menu.classList.toggle('open');
+  const btn=menu.querySelector('.nav-menu-btn');
+  if(btn)btn.setAttribute('aria-expanded',String(isOpen));
+}
+function closeNavMenu(){
+  const menu=document.getElementById('navMenu');
+  if(!menu)return;
+  menu.classList.remove('open');
+  const btn=menu.querySelector('.nav-menu-btn');
+  if(btn)btn.setAttribute('aria-expanded','false');
+}
+document.addEventListener('click',event=>{
+  const menu=document.getElementById('navMenu');
+  if(menu&&!menu.contains(event.target))closeNavMenu();
+});
+</script>
+</body>
+</html>

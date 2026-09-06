@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#070706">
+  <title>Swarm Pilot — WHY.</title>
+  <style>
+    html,body{min-height:100%;margin:0;background:#070706;color:#f0ebe0}
+    body{display:grid;place-items:center;font-family:Georgia,serif}
+    p{color:#a08c5a;letter-spacing:.12em}
+  </style>
+</head>
+<body>
+  <p>Preparing the Swarm pilot…</p>
+  <script>
+    (async () => {
+      const response = await fetch("index.html", { cache: "no-store" });
+      let html = await response.text();
+      const closingScript = "<" + "/script>";
+      const adapterTag = '<script src="swarm-demo.js?v=20260831-01" defer>' + closingScript;
+      html = html
+        .replace("<body>", '<body data-swarm-demo="true">')
+        .replace("<title>WHY.</title>", "<title>Swarm Pilot — WHY.</title>")
+        .replace('<meta name="robots" content="index,follow,max-image-preview:large">', '<meta name="robots" content="noindex,nofollow">')
+        .replace("</head>", '<style>.swarm-whitepaper{display:inline-flex;align-items:center;justify-content:center}</style></head>')
+        .replace(/<script src="why-app\.js[^>]*><\/script>/, adapterTag + "\n  $&");
+      document.open();
+      document.write(html);
+      document.close();
+    })().catch(() => {
+      document.body.innerHTML = "<p>The Swarm pilot could not load.</p>";
+    });
+  </script>
+</body>
+</html>

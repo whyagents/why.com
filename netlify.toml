@@ -1,0 +1,28 @@
+[build]
+  command = "node scripts/build-public.mjs"
+  publish = ".netlify-dist"
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Cache-Control = "no-store"
+    X-Content-Type-Options = "nosniff"
+
+# The application bundle is query-versioned in index.html. Repeat visits can keep
+# that exact release indefinitely; each deploy changes the query version.
+[[headers]]
+  for = "/why-app.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
