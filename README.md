@@ -46,16 +46,6 @@ and a private curiosity graph stored on the user's device. The larger research
 question is whether chosen and unselected paths can help AI systems learn not
 only how to answer a problem, but what deserves investigation next.
 
-## What is open
-
-This repository contains the production web application, server orchestration,
-prompt and response contracts, local memory graph, Daily WHY system, database
-migrations, security boundaries, build pipeline, and regression tests.
-
-Production credentials, production databases, user data, and operational logs
-are not included. The code is MIT licensed; the WHY name, domain, and brand are
-not. See [TRADEMARKS.md](TRADEMARKS.md).
-
 ## The product loop
 
 ### 1. One structured turn
