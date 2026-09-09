@@ -27,9 +27,12 @@ const index = readFileSync(join(root, "index.html"), "utf8");
 const pro = readFileSync(join(root, "pro.html"), "utf8");
 const indexFooter = index.match(/<footer>([\s\S]*?)<\/footer>/)?.[1] || "";
 const proFooter = pro.match(/<footer>([\s\S]*?)<\/footer>/)?.[1] || "";
+const incArticle = "https://www.inc.com/sam-blum/the-17000-domain-that-could-be-worth-70-million-just-became-an-ai-chatbot-instead-people-are-asking-why/91393038";
 for (const signature of ["foot-socials", "https://x.com/whydots", "https://github.com/whyagents", "https://discord.gg/raAQCeDr3e", "© 2026 Ockams Inc. All rights reserved.", "Privacy choices"]) {
   check(`PRO footer includes ${signature}`, proFooter.includes(signature) && indexFooter.includes(signature));
 }
+check("homepage links its Inc. coverage above the footer", index.includes(`class="press-proof" href="${incArticle}"`) && index.indexOf('<a class="press-proof"') < index.indexOf("<footer>"));
+check("Inc. coverage has explicit accessible context", index.includes('aria-label="Read about WHY.com in Inc."') && index.includes("As seen in"));
 check("standalone why.com link above the PRO footer is removed", !pro.includes('class="text-link"'));
 
 console.log(`\n${pass} passed, ${fail} failed`);

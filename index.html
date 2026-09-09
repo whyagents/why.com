@@ -111,6 +111,13 @@
     .foot-copy { display:flex; align-items:center; justify-content:center; gap:1rem; flex-wrap:wrap; color:var(--mid); font-size:.455rem; font-weight:700; letter-spacing:.5em; text-transform:uppercase; }
     .foot-copy a { color:var(--mid); transition:color .25s; }
     .foot-copy a:hover { color:var(--gold-hi); }
+    .press-proof { position:relative; z-index:2; display:flex; align-items:center; justify-content:center; gap:1rem; min-height:108px; border-top:1px solid rgba(255,255,255,.04); color:var(--mid); background:#040403; transition:color .25s ease,background .25s ease; }
+    .press-proof:hover { color:var(--hi); background:#070706; }
+    .press-proof-kicker { font-size:.5rem; font-weight:700; letter-spacing:.42em; text-transform:uppercase; }
+    .press-proof-logo { color:#ef3e33; font-family:"Arial Black","Helvetica Neue",Arial,sans-serif; font-size:2.15rem; font-weight:900; letter-spacing:-.09em; line-height:1; }
+    .press-proof-arrow { color:var(--dim); font-size:.72rem; transition:color .25s ease,transform .25s ease; }
+    .press-proof:hover .press-proof-arrow { color:var(--gold-hi); transform:translate(2px,-2px); }
+    .press-proof+footer { border-top:0; padding-top:1.25rem; }
     .loading-screen { display:flex; align-items:center; justify-content:center; padding:7rem 2rem 3rem; }
     .loading-inner { display:grid; place-items:center; width:min(460px,100%); }
     .signal-map { position:relative; width:min(430px,88vw); filter:drop-shadow(0 18px 50px rgba(0,0,0,.78)); }
@@ -458,6 +465,9 @@
       .curiosity-node.is-waiting .door-board.is-concept .curiosity-door.is-selected{flex-direction:column;gap:.22rem}
       .curiosity-node.is-waiting .door-board.is-concept .curiosity-door.is-selected .door-opening{display:block}
       .curiosity-node.is-waiting>.door-zone>.node-progress{display:none}
+      .press-proof{gap:.78rem;min-height:84px}
+      .press-proof-kicker{font-size:.44rem;letter-spacing:.34em}
+      .press-proof-logo{font-size:1.75rem}
     }
     @media (min-width:641px) {
       .answer-screen{padding-bottom:7rem}
@@ -512,6 +522,11 @@
       <div class="search-glow"></div>
       <div class="seed-board" id="seedBoard" aria-label="Start a curiosity path"></div>
     </div>
+    <a class="press-proof" href="https://www.inc.com/sam-blum/the-17000-domain-that-could-be-worth-70-million-just-became-an-ai-chatbot-instead-people-are-asking-why/91393038" target="_blank" rel="noopener" aria-label="Read about WHY.com in Inc.">
+      <span class="press-proof-kicker">As seen in</span>
+      <span class="press-proof-logo" aria-hidden="true">Inc.</span>
+      <span class="press-proof-arrow" aria-hidden="true">↗</span>
+    </a>
     <footer>
       <div class="foot">
         <div class="foot-socials">
