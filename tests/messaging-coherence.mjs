@@ -12,7 +12,7 @@ const check = (name, condition) => {
 
 console.log("\n[WHY] unified questioning-layer narrative");
 check("About states the mission and business loop", pages["about.html"].includes("WHY teaches machines what to question next.") && pages["about.html"].includes("Free users reveal where curiosity wants to go. Experts show where intelligence should go. AI labs pay to learn the difference."));
-check("AI explains the human decision layer", pages["ai.html"].includes("WHY teaches it to question") && pages["ai.html"].includes("one answer and three validated directions") && pages["ai.html"].includes("training data, reward models, and private evaluations"));
+check("AI explains the human decision layer", pages["ai.html"].includes("AI that knows why") && pages["ai.html"].includes("one answer and three validated directions") && pages["ai.html"].includes("training data, reward models, and private evaluations"));
 check("Research keeps observation distinct from conscious rejection", pages["research.html"].includes("conscious rejection is not assumed") && pages["research.html"].includes("not treated as independent votes or proof that they were read"));
 check("Research separates deployed work from hypotheses", pages["research.html"].includes("The deployed product is the baseline") && pages["research.html"].includes("remain a falsifiable research program"));
 check("Research separates consumer, expert, AI, and private layers", pages["research.html"].includes("One Platform, Separate Evidence") && pages["research.html"].includes("WHY Pro") && pages["research.html"].includes("not population training data by default"));
