@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#070706">
+  <title>AI-Native Advertising Demo — WHY.</title>
+  <style>
+    html,body{min-height:100%;margin:0;background:#070706;color:#f0ebe0}
+    body{display:grid;place-items:center;font-family:Georgia,serif}
+    p{color:#a08c5a;letter-spacing:.12em}
+  </style>
+</head>
+<body>
+  <p>Preparing the advertising demo…</p>
+  <script>
+    (async () => {
+      const response = await fetch("index.html", { cache: "no-store" });
+      let html = await response.text();
+      const closingScript = "<" + "/script>";
+      const adapterTag = '<script src="ads-demo.js?v=20260915-01" defer>' + closingScript;
+      const demoStyles = `
+        <style>
+          .ads-demo-note{display:inline-flex;align-items:center;justify-content:center;cursor:default;opacity:.78}
+          .curiosity-door.is-sponsored{border-color:rgba(196,170,114,.72);background:rgba(160,140,90,.075);font-weight:600;box-shadow:0 0 0 1px rgba(196,170,114,.12),0 18px 52px -38px rgba(196,170,114,.88)}
+          .curiosity-door.is-sponsored:hover{border-color:var(--gold-hi);background:rgba(160,140,90,.12)}
+          .ads-sponsor-tag{display:block;margin-bottom:.48rem;color:var(--gold-hi);font-family:"DM Sans",sans-serif;font-size:.52rem;font-style:normal;font-weight:700;letter-spacing:.2em;line-height:1.35;text-transform:uppercase}
+          .ads-lead-card{margin:2.15rem 0 .35rem;padding:1.45rem;border:1px solid rgba(196,170,114,.34);border-radius:1.35rem;background:linear-gradient(145deg,rgba(160,140,90,.11),rgba(17,17,16,.82));box-shadow:0 24px 75px -48px rgba(196,170,114,.52)}
+          .ads-lead-eyebrow{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1rem;color:var(--gold-hi);font-family:"DM Sans",sans-serif;font-size:.57rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase}
+          .ads-lead-bid{color:var(--mid);white-space:nowrap}
+          .ads-lead-card h2{margin:0 0 .5rem;color:var(--hi);font-family:"Cormorant Garamond",serif;font-size:clamp(1.65rem,3vw,2.25rem);font-weight:500;letter-spacing:-.02em;line-height:1.05}
+          .ads-lead-copy{margin:0 0 1.25rem;color:rgba(240,235,224,.7);font-family:"EB Garamond",serif;font-size:1.08rem;line-height:1.45}
+          .ads-lead-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.85rem}
+          .ads-field{display:grid;gap:.38rem}
+          .ads-field.is-wide{grid-column:1/-1}
+          .ads-field label{color:var(--mid);font-size:.58rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+          .ads-field input,.ads-field select{width:100%;min-height:46px;padding:.75rem .85rem;border:1px solid rgba(255,255,255,.13);border-radius:.8rem;outline:0;color:var(--hi);background:rgba(8,8,6,.72);font-family:"DM Sans",sans-serif;font-size:.88rem;transition:border-color .2s,box-shadow .2s}
+          .ads-field input:focus,.ads-field select:focus{border-color:var(--gold-hi);box-shadow:0 0 0 3px rgba(160,140,90,.09)}
+          .ads-consent{display:flex;grid-column:1/-1;align-items:flex-start;gap:.7rem;color:var(--mid);font-size:.7rem;line-height:1.45}
+          .ads-consent input{flex:0 0 auto;margin-top:.18rem;accent-color:var(--gold)}
+          .ads-lead-submit{grid-column:1/-1;min-height:48px;border:1px solid var(--hi);border-radius:999px;color:var(--ink);background:var(--hi);font-size:.68rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;transition:background .2s,color .2s,transform .2s}
+          .ads-lead-submit:hover{color:var(--hi);background:var(--gold);transform:translateY(-1px)}
+          .ads-lead-fineprint{grid-column:1/-1;color:var(--dim);font-size:.62rem;line-height:1.45;text-align:center}
+          .ads-lead-success{padding:.4rem 0;color:var(--hi);font-family:"EB Garamond",serif;font-size:1.25rem;line-height:1.5}
+          .ads-lead-success strong{color:var(--gold-hi);font-weight:500}
+          @media(max-width:640px){
+            .ads-lead-card{padding:1.15rem}
+            .ads-lead-form{grid-template-columns:1fr}
+            .ads-field,.ads-field.is-wide,.ads-consent,.ads-lead-submit,.ads-lead-fineprint{grid-column:1}
+            .ads-lead-eyebrow{align-items:flex-start;flex-direction:column;gap:.35rem}
+          }
+        </style>`;
+      html = html
+        .replace("<body>", '<body data-ads-demo="true">')
+        .replace("<title>WHY.</title>", "<title>AI-Native Advertising Demo — WHY.</title>")
+        .replace("</head>", '<meta name="robots" content="noindex,nofollow">' + demoStyles + "</head>")
+        .replace(/<script src="why-app\.js[^>]*><\/script>/, adapterTag + '\n  <script src="why-app.js?v=20260915-ads01" defer>' + closingScript);
+      document.open();
+      document.write(html);
+      document.close();
+    })().catch(() => {
+      document.body.innerHTML = "<p>The advertising demo could not load.</p>";
+    });
+  </script>
+</body>
+</html>

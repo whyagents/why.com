@@ -298,7 +298,7 @@ check("permanent daily pages and episode JSON are generated", build.includes('jo
 check("permanent daily pages resolve app assets from the root", build.includes('<base href="/">'));
 check("permanent daily pages contain the direct three-door choice", build.includes('class="daily-root-board"') && build.includes("dailyRoot.doors.map") && !build.includes("click to continue"));
 check("permanent daily pages retain the six rabbit-hole launchpads", build.includes('class="rabbit-launcher"') && build.includes('data-rabbit-category=') && build.includes('"sports", "entertainment", "travel", "technology", "business", "politics"'));
-check("the homepage promise and bundle are current", page.includes("WHY — provocative questions. Three paths. No bottom.") && page.includes("why-app.js?v=20260905-01"));
+check("the homepage promise and bundle are current", page.includes("WHY — provocative questions. Three paths. No bottom.") && page.includes("why-app.js?v=20260915-01"));
 check("privacy explains the anonymous aggregate signal", privacy.includes("one-way hash of that token") && privacy.includes("limit the browser to one counted choice per question node"));
 
 console.log(`\n${pass} passed, ${fail} failed`);

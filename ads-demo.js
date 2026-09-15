@@ -1,0 +1,238 @@
+(() => {
+  "use strict";
+
+  const SPONSORED_QUERY = "Which car actually fits your life?";
+
+  const CAMPAIGN = Object.freeze({
+    id: "cars-qualified-lead-demo-v1",
+    advertiser: "Cars.com",
+    disclosure: "Sample advertiser · no affiliation",
+    bidDollars: 100,
+    sponsoredQuery: SPONSORED_QUERY,
+    headline: "Find a car that fits your life—not just your feed.",
+    copy: "Tell us what matters and a participating local dealer could follow up with matches built around your actual week.",
+    consent: "I agree that a participating dealer may contact me about this request.",
+    fields: Object.freeze([
+      { name: "zip", label: "ZIP code", type: "text", inputMode: "numeric", pattern: "[0-9]{5}", placeholder: "90210", required: true },
+      { name: "vehicle", label: "Vehicle style", type: "select", options: ["SUV", "Sedan", "Truck", "EV", "Minivan", "Not sure"], required: true },
+      { name: "budget", label: "Monthly budget", type: "select", options: ["Under $400", "$400–$599", "$600–$799", "$800+", "Cash buyer"], required: true },
+      { name: "timeline", label: "Buying timeline", type: "select", options: ["This week", "Within 30 days", "Within 90 days", "Just researching"], required: true },
+      { name: "trade", label: "Trade-in", type: "select", options: ["Yes", "No", "Not sure"], required: true },
+      { name: "name", label: "Name", type: "text", autocomplete: "name", placeholder: "Your name", required: true },
+      { name: "email", label: "Email", type: "email", autocomplete: "email", placeholder: "you@example.com", required: true },
+      { name: "phone", label: "Phone · optional", type: "tel", autocomplete: "tel", placeholder: "(555) 555-5555", required: false },
+    ]),
+  });
+
+  const HOME_CHOICES = Object.freeze([
+    { label: "status", query: "Why do people buy more car than they need?", domain: "public" },
+    { label: "payment", query: "Why does the monthly payment hide the real price?", domain: "public" },
+    { label: "regret", query: "What makes a car feel right before it is?", domain: "personal" },
+  ]);
+
+  const DEPTH_TWO = Object.freeze([
+    "Why does status beat practicality?",
+    "How do dealers anchor the monthly payment?",
+    "What predicts buyer's remorse?",
+  ]);
+
+  const DEPTH_THREE = Object.freeze([
+    "What does depreciation punish first?",
+    "Why do safety claims feel personal?",
+    "How much does the wrong car really cost?",
+  ]);
+
+  const DEPTH_FOUR = Object.freeze([
+    "Why do people keep cars they dislike?",
+    SPONSORED_QUERY,
+    "When should you walk away from a deal?",
+  ]);
+
+  const CONTINUE = Object.freeze([
+    "What should you test on a drive?",
+    "Which fees deserve a hard no?",
+    "When does financing become the trap?",
+  ]);
+
+  const ANSWERS = new Map([
+    ["why do people buy more car than they need?", "a car is transportation wearing a social costume. people often buy for the person they want strangers to see, then spend years financing the performance."],
+    ["why does the monthly payment hide the real price?", "the monthly number shrinks the pain by stretching time. a manageable payment can quietly conceal a longer loan, more interest and a car that costs far more."],
+    ["what makes a car feel right before it is?", "the first drive is theatre: clean cabin, instant acceleration, zero groceries and no parking headache. real compatibility usually appears after the showroom spell wears off."],
+    ["why does status beat practicality?", "status pays immediately; practicality pays slowly. the badge gets noticed tonight, while repair costs, cramped parking and depreciation wait until the applause is gone."],
+    ["how do dealers anchor the monthly payment?", "once the conversation centers on one monthly number, price, rate and loan length become movable scenery. the payment stays familiar while the total cost walks away."],
+    ["what predicts buyer's remorse?", "regret usually begins where fantasy met routine: the commute was longer, the payment tighter, the cargo smaller and the supposedly exciting car became another obligation."],
+    ["what does depreciation punish first?", "depreciation punishes novelty. the moment a new car becomes yesterday's model, buyers stop paying for untouched possibility and start pricing mileage, demand and future repairs."],
+    ["why do safety claims feel personal?", "safety marketing rarely sells crash data alone. it sells relief from imagining your family in danger, which makes a feature list feel like a moral decision."],
+    ["how much does the wrong car really cost?", "the sticker is only admission. insurance, fuel, financing, depreciation and repairs keep charging after the excitement leaves—often turning a small mismatch into an expensive roommate."],
+    ["why do people keep cars they dislike?", "selling forces the mistake into the open. keeping it lets the owner call the payment temporary, protect the original decision and postpone the awkward math."],
+    ["which car actually fits your life?", "your best car is not the loudest option. it is the one that survives your actual week: commute, parking, passengers, payment and the day the warranty runs out."],
+    ["when should you walk away from a deal?", "walk when the numbers only work after urgency, mystery fees or a longer loan. a good car does not need bad arithmetic and a ticking clock."],
+    ["what should you test on a drive?", "test the boring parts: visibility, parking, seat comfort, phone pairing and road noise. ten quiet annoyances will outlive one dramatic acceleration pull."],
+    ["which fees deserve a hard no?", "question every fee that does not change the car or satisfy the government. vague protection packages and dealer add-ons often exist because confusion has excellent margins."],
+    ["when does financing become the trap?", "financing becomes the trap when affordability depends on extending the loan beyond the car's dependable years. the payment looks smaller while the risk compounds."],
+  ]);
+
+  const normalize = (value) => String(value || "").trim().toLowerCase().replace(/[.!]+$/g, "");
+
+  const stageFor = (query) => {
+    const normalized = normalize(query);
+    if (HOME_CHOICES.some((choice) => normalize(choice.query) === normalized)) return DEPTH_TWO;
+    if (DEPTH_TWO.some((candidate) => normalize(candidate) === normalized)) return DEPTH_THREE;
+    if (DEPTH_THREE.some((candidate) => normalize(candidate) === normalized)) return DEPTH_FOUR;
+    return CONTINUE;
+  };
+
+  const answer = ({ query = "", domain = "public" } = {}) => {
+    const normalized = normalize(query);
+    const matchedAnswer = ANSWERS.get(normalized + "?") || ANSWERS.get(normalized) || ANSWERS.get(normalize(HOME_CHOICES[0].query));
+    const next = stageFor(query);
+    const roles = ["deepen", "contradiction", "consequence"];
+    return {
+      answer: matchedAnswer,
+      voiceNote: {
+        domain,
+        prompt: "three automotive paths",
+        copyStyle: "question_v2",
+        pulls: next.map((question, index) => ({
+          role: roles[index],
+          heat: index === 1 ? 9 : 7,
+          label: question,
+          query: question,
+          grounding: "off",
+        })),
+      },
+      domain,
+      sources: [],
+      receiptsAvailable: false,
+      preview: false,
+      grounding: "off",
+      groundingStatus: "offline_ads_demo",
+      elapsedMs: 120,
+    };
+  };
+
+  const appendText = (parent, tag, className, value) => {
+    const element = document.createElement(tag);
+    if (className) element.className = className;
+    element.textContent = value;
+    parent.append(element);
+    return element;
+  };
+
+  const buildField = (field) => {
+    const wrapper = document.createElement("div");
+    wrapper.className = "ads-field" + (field.name === "phone" ? " is-wide" : "");
+    const id = "ads-demo-" + field.name;
+    const label = appendText(wrapper, "label", "", field.label);
+    label.htmlFor = id;
+
+    let control;
+    if (field.type === "select") {
+      control = document.createElement("select");
+      const empty = document.createElement("option");
+      empty.value = "";
+      empty.textContent = "Choose one";
+      control.append(empty);
+      for (const value of field.options) {
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = value;
+        control.append(option);
+      }
+    } else {
+      control = document.createElement("input");
+      control.type = field.type;
+      if (field.inputMode) control.inputMode = field.inputMode;
+      if (field.pattern) control.pattern = field.pattern;
+      if (field.placeholder) control.placeholder = field.placeholder;
+      if (field.autocomplete) control.autocomplete = field.autocomplete;
+    }
+    control.id = id;
+    control.name = field.name;
+    control.required = field.required;
+    wrapper.append(control);
+    return wrapper;
+  };
+
+  const renderLeadCard = (root) => {
+    if (!root || root.querySelector("[data-ads-lead-card]")) return;
+    const answerSection = root.querySelector(".node-answer");
+    if (!answerSection) return;
+
+    const card = document.createElement("section");
+    card.className = "ads-lead-card";
+    card.dataset.adsLeadCard = CAMPAIGN.id;
+    card.setAttribute("aria-labelledby", "adsLeadTitle");
+
+    const eyebrow = document.createElement("div");
+    eyebrow.className = "ads-lead-eyebrow";
+    appendText(eyebrow, "span", "", "Sponsored · " + CAMPAIGN.advertiser + " example");
+    appendText(eyebrow, "span", "ads-lead-bid", "$" + CAMPAIGN.bidDollars + " qualified-lead bid");
+    card.append(eyebrow);
+
+    const title = appendText(card, "h2", "", CAMPAIGN.headline);
+    title.id = "adsLeadTitle";
+    appendText(card, "p", "ads-lead-copy", CAMPAIGN.copy);
+
+    const form = document.createElement("form");
+    form.className = "ads-lead-form";
+    form.dataset.adsLeadForm = CAMPAIGN.id;
+    form.autocomplete = "off";
+    for (const field of CAMPAIGN.fields) form.append(buildField(field));
+
+    const consent = document.createElement("label");
+    consent.className = "ads-consent";
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.name = "contactConsent";
+    checkbox.required = true;
+    consent.append(checkbox, document.createTextNode(CAMPAIGN.consent));
+    form.append(consent);
+
+    const submit = appendText(form, "button", "ads-lead-submit", "Find my matches");
+    submit.type = "submit";
+    appendText(form, "p", "ads-lead-fineprint", CAMPAIGN.disclosure + ". Investor demo only. Nothing entered here is transmitted or retained.");
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (!form.reportValidity()) return;
+      const success = document.createElement("div");
+      success.className = "ads-lead-success";
+      success.setAttribute("role", "status");
+      const strong = document.createElement("strong");
+      strong.textContent = "Qualified lead event.";
+      success.append(strong, document.createTextNode(" In production, this explicit opt-in would trigger the advertiser's $" + CAMPAIGN.bidDollars + " bid. This demo transmitted nothing."));
+      form.replaceWith(success);
+    });
+
+    card.append(form);
+    answerSection.append(card);
+  };
+
+  const decorate = ({ root, query } = {}) => {
+    if (!root) return;
+    const sponsoredQuery = normalize(CAMPAIGN.sponsoredQuery);
+    for (const button of root.querySelectorAll(".curiosity-door")) {
+      if (normalize(button.dataset.query) !== sponsoredQuery) continue;
+      button.classList.add("is-sponsored");
+      button.dataset.sponsored = "true";
+      button.setAttribute("aria-label", "Sponsored by sample advertiser " + CAMPAIGN.advertiser + ": " + CAMPAIGN.sponsoredQuery);
+      if (!button.querySelector(".ads-sponsor-tag")) {
+        const tag = document.createElement("small");
+        tag.className = "ads-sponsor-tag";
+        tag.textContent = "Sponsored · " + CAMPAIGN.advertiser + " example";
+        button.prepend(tag);
+      }
+    }
+    if (normalize(query) === sponsoredQuery) renderLeadCard(root);
+  };
+
+  window.WHY_ADS_DEMO = Object.freeze({
+    greeting: "Why do people buy the wrong car?",
+    homeChoices: HOME_CHOICES,
+    campaign: CAMPAIGN,
+    answer,
+    decorate,
+  });
+})();
+

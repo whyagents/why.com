@@ -10,6 +10,8 @@ const outputRoot = join(projectRoot, ".netlify-dist");
 // served by Netlify's static publisher.
 const publicFiles = [
   "about.html",
+  "ads-demo.js",
+  "ads.html",
   "ai.html",
   "app.html",
   "banner.png",
@@ -64,6 +66,20 @@ await writeFile(
 );
 
 const appShell = await readFile(join(projectRoot, "index.html"), "utf8");
+const adsTemplate = await readFile(join(projectRoot, "ads.html"), "utf8");
+const adsStyles = adsTemplate.match(/const demoStyles = `([\s\S]*?)`;/)?.[1];
+if (!adsStyles) throw new Error("The advertising demo styles could not be extracted.");
+const adsPage = appShell
+  .replace("<body>", '<body data-ads-demo="true">')
+  .replace("<title>WHY.</title>", "<title>AI-Native Advertising Demo — WHY.</title>")
+  .replace(/<meta name="robots" content="[^"]*">/, '<meta name="robots" content="noindex,nofollow">')
+  .replace("</head>", adsStyles + "</head>")
+  .replace(
+    /<script src="why-app\.js[^>]*><\/script>/,
+    '<script src="ads-demo.js?v=20260915-01" defer></script>\n  <script src="why-app.js?v=20260915-ads01" defer></script>',
+  );
+await writeFile(join(outputRoot, "ads.html"), adsPage);
+
 for (const dailyEpisode of DAILY_WHY_EPISODES) {
   const dailyUrl = `https://why.com/daily/${dailyEpisode.id}/`;
   const description = `Today’s WHY: ${dailyEpisode.question} Choose a path and see where everyone else went.`;

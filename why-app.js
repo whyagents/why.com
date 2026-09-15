@@ -43,6 +43,8 @@
   })();
   const SWARM_ADAPTER = document.body.dataset.swarmDemo === "true" ? window.WHY_SWARM_DEMO : null;
   const SWARM_DEMO = Boolean(SWARM_ADAPTER?.answer && SWARM_ADAPTER?.greeting);
+  const ADS_ADAPTER = document.body.dataset.adsDemo === "true" ? window.WHY_ADS_DEMO : null;
+  const ADS_DEMO = Boolean(ADS_ADAPTER?.answer && ADS_ADAPTER?.greeting && Array.isArray(ADS_ADAPTER?.homeChoices) && ADS_ADAPTER.homeChoices.length === 3);
   const DAILY_PAGE_ID = String(document.body.dataset.dailyEpisodeId || location.pathname.match(/^\/daily\/(\d{4}-\d{2}-\d{2})\/?/)?.[1] || "").trim().slice(0, 32);
   const LOCAL_PREVIEW_HOST = ["localhost", "127.0.0.1", "::1"].includes(location.hostname);
   const REVIEW = location.protocol === "file:" || (LOCAL_PREVIEW_HOST && PAGE_PARAMS.has("review"));
@@ -1828,7 +1830,7 @@
 
   function scheduleHomeHeroRotation() {
     clearTimeout(homeHeroRotationTimer);
-    if (REDUCED_MOTION.matches || DAILY_PAGE_ID || views.home.hidden || homeHeroPaused) return;
+    if (ADS_DEMO || SWARM_DEMO || REDUCED_MOTION.matches || DAILY_PAGE_ID || views.home.hidden || homeHeroPaused) return;
     homeHeroRotationTimer = setTimeout(() => {
       const index = HOMEPAGE_CATEGORIES.indexOf(homeHeroCategory);
       showHomeHeroCategory(HOMEPAGE_CATEGORIES[(index + 1) % HOMEPAGE_CATEGORIES.length]);
@@ -1880,24 +1882,35 @@
 
   function homeHeroMarkup() {
     const initialSeed = homeHeroSeed(homeHeroCategory) || localCategoryPool(homeHeroCategory)[0];
-    const question = SWARM_DEMO ? SWARM_ADAPTER.greeting : initialSeed?.query || "What deserves your attention next?";
-    const ownForm = SWARM_DEMO ? "" : `<form class="start-question-form daily-own-form" id="startQuestionForm" aria-label="Ask WHY" hidden>
+    const demoAdapter = ADS_DEMO ? ADS_ADAPTER : SWARM_DEMO ? SWARM_ADAPTER : null;
+    const question = demoAdapter ? demoAdapter.greeting : initialSeed?.query || "What deserves your attention next?";
+    const ownForm = demoAdapter ? "" : `<form class="start-question-form daily-own-form" id="startQuestionForm" aria-label="Ask WHY" hidden>
           <svg class="ic search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.4"/><path d="M20.4 20.4 15.6 15.6"/></svg>
           <input class="start-question-input" id="startQuestionInput" aria-label="Ask your own question" placeholder="Ask anything…" maxlength="4000" autocomplete="off">
           <button class="start-question-submit" type="submit" aria-label="Ask WHY"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19.4V4.6M5.6 11 12 4.6 18.4 11"/></svg></button>
         </form>`;
-    const ownAction = SWARM_DEMO
-      ? `<a class="daily-own-toggle swarm-whitepaper" href="whitepaper.pdf" target="_blank" rel="noopener">WHY Whitepaper</a>`
+    const ownAction = ADS_DEMO
+      ? `<span class="daily-own-toggle ads-demo-note">Investor demo · sample campaign</span>`
+      : SWARM_DEMO
+        ? `<a class="daily-own-toggle swarm-whitepaper" href="whitepaper.pdf" target="_blank" rel="noopener">WHY Whitepaper</a>`
       : `<div class="home-action-row"><button class="daily-own-toggle" type="button" data-action="open-daily-search">Ask WHY.</button>
       <button class="daily-own-toggle" type="button" data-action="close-daily-search" hidden>Ask WHY.</button>
       <a class="daily-own-toggle home-pro-link" href="/pro">WHY. Pro</a></div>`;
+    const choiceMarkup = ADS_DEMO
+      ? ADS_ADAPTER.homeChoices.slice(0, 3).map((choice) => {
+          const label = cleanText(choice?.label, 24).toLowerCase();
+          const query = cleanText(choice?.query, 160);
+          const domain = safeDomain(choice?.domain || "public");
+          return `<button class="home-category" type="button" data-ads-seed="true" data-query="${escapeHtml(query)}" data-domain="${escapeHtml(domain)}" aria-label="${escapeHtml(`${label} — ${query}`)}">${escapeHtml(label)}</button>`;
+        }).join("")
+      : HOMEPAGE_CATEGORIES.map((category) => {
+          const seed = homeHeroSeed(category);
+          return `<button class="home-category${category === homeHeroCategory ? " is-active" : ""}" type="button" data-home-category="${category}" aria-pressed="${category === homeHeroCategory}" aria-label="${escapeHtml(`${category} — ${seed?.query || "open a rabbit hole"}`)}">${category === "sports" ? "sport" : category}</button>`;
+        }).join("");
     return `<section class="home-hero">
       <h1><span class="home-hero-question" data-home-hero-question aria-live="polite">${escapeHtml(question)}</span></h1>
       <div class="home-choice-slot">
-        <div class="home-category-row" aria-label="Choose a curiosity category">${HOMEPAGE_CATEGORIES.map((category) => {
-          const seed = homeHeroSeed(category);
-          return `<button class="home-category${category === homeHeroCategory ? " is-active" : ""}" type="button" data-home-category="${category}" aria-pressed="${category === homeHeroCategory}" aria-label="${escapeHtml(`${category} — ${seed?.query || "open a rabbit hole"}`)}">${category === "sports" ? "sport" : category}</button>`;
-        }).join("")}</div>
+        <div class="home-category-row" aria-label="Choose a curiosity category">${choiceMarkup}</div>
         ${ownForm}
       </div>
       ${ownAction}
@@ -1914,6 +1927,12 @@
       if (!rabbitLauncherTracked) {
         rabbitLauncherTracked = true;
         track("rabbit_hole_categories_shown", { source: "rabbit", area: "homepage", doorCount: HOMEPAGE_CATEGORIES.length });
+      }
+      if (ADS_DEMO) {
+        const target = $("[data-home-hero-question]");
+        if (target && !REDUCED_MOTION.matches) typeHomeHeroQuestion(target, ADS_ADAPTER.greeting);
+        else if (target) target.textContent = ADS_ADAPTER.greeting;
+        return;
       }
       for (const category of HOMEPAGE_CATEGORIES) loadCategorySeeds(category);
       if (SWARM_DEMO) {
@@ -2452,6 +2471,10 @@
     </article>`;
     const lead = $(".node-answer .prose p");
     if (lead) lead.classList.add("lead");
+    if (ADS_DEMO && typeof ADS_ADAPTER.decorate === "function") {
+      try { ADS_ADAPTER.decorate({ root: $("#conversation"), query: node.question, depth: node.depth }); }
+      catch (error) { if (DEBUG) console.warn("WHY ads demo decoration failed", error); }
+    }
     show("answer");
     interaction = {
       status: pending ? pending.status : "displayed",
@@ -2740,6 +2763,16 @@
   async function fetchAnswer(context, signal, timeoutMs = 42000, onChunk = null) {
     if (SELF_HARM_CRISIS.test(context.query) || context.payload.path?.safetyMode === "crisis") {
       return demoCrisisAnswer(context.query);
+    }
+    if (ADS_DEMO) {
+      await wait(120);
+      if (signal?.aborted) throw signal.reason;
+      const preview = ADS_ADAPTER.answer({
+        query: context.query,
+        domain: context.payload.path?.domain || guessDomain(context.query),
+      });
+      onChunk?.(preview.answer);
+      return normalizeResponse(preview, context.query, context.payload.path?.domain || "");
     }
     if (SWARM_DEMO) {
       await wait(120);
@@ -3830,6 +3863,14 @@
     if (dailyRootDoor) { void selectDailyRootDoor(dailyRootDoor); return; }
     const door = event.target.closest(".curiosity-door");
     if (door) { selectDoor(door); return; }
+    const adsSeed = event.target.closest("[data-ads-seed]");
+    if (adsSeed) {
+      const query = cleanText(adsSeed.dataset.query, 160);
+      if (!query) { toast("That path missed its cue."); return; }
+      triggerDoorHaptic({ jackpot: false, gained: 3 });
+      startPath(query, "seed", safeDomain(adsSeed.dataset.domain || "public"));
+      return;
+    }
     const homeCategory = event.target.closest("[data-home-category]");
     if (homeCategory) {
       const category = cleanText(homeCategory.dataset.homeCategory, 32).toLowerCase();
