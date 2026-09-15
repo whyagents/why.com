@@ -10,17 +10,15 @@
     bidDollars: 100,
     sponsoredQuery: SPONSORED_QUERY,
     headline: "Find a car that fits your life—not just your feed.",
-    copy: "Tell us what matters and a participating local dealer could follow up with matches built around your actual week.",
+    copy: "Two quick choices. Then we can find matches built around your actual week.",
     consent: "I agree that a participating dealer may contact me about this request.",
+    qualifiers: Object.freeze([
+      { name: "vehicle", label: "What fits your week?", options: ["SUV", "Sedan", "Truck", "EV"] },
+      { name: "timeline", label: "When are you moving?", options: ["Now", "30 days", "Just looking"] },
+    ]),
     fields: Object.freeze([
       { name: "zip", label: "ZIP code", type: "text", inputMode: "numeric", pattern: "[0-9]{5}", placeholder: "90210", required: true },
-      { name: "vehicle", label: "Vehicle style", type: "select", options: ["SUV", "Sedan", "Truck", "EV", "Minivan", "Not sure"], required: true },
-      { name: "budget", label: "Monthly budget", type: "select", options: ["Under $400", "$400–$599", "$600–$799", "$800+", "Cash buyer"], required: true },
-      { name: "timeline", label: "Buying timeline", type: "select", options: ["This week", "Within 30 days", "Within 90 days", "Just researching"], required: true },
-      { name: "trade", label: "Trade-in", type: "select", options: ["Yes", "No", "Not sure"], required: true },
-      { name: "name", label: "Name", type: "text", autocomplete: "name", placeholder: "Your name", required: true },
       { name: "email", label: "Email", type: "email", autocomplete: "email", placeholder: "you@example.com", required: true },
-      { name: "phone", label: "Phone · optional", type: "tel", autocomplete: "tel", placeholder: "(555) 555-5555", required: false },
     ]),
   });
 
@@ -119,34 +117,44 @@
     return element;
   };
 
+  const buildChoiceField = (field) => {
+    const fieldset = document.createElement("fieldset");
+    fieldset.className = "ads-choice-field";
+    const legend = appendText(fieldset, "legend", "", field.label);
+    legend.id = "ads-demo-" + field.name + "-label";
+    const options = document.createElement("div");
+    options.className = "ads-choice-row";
+    for (const value of field.options) {
+      const choice = document.createElement("label");
+      choice.className = "ads-choice";
+      const input = document.createElement("input");
+      input.type = "radio";
+      input.name = field.name;
+      input.value = value;
+      input.required = true;
+      input.setAttribute("aria-label", value);
+      const copy = appendText(choice, "span", "", value);
+      copy.setAttribute("aria-hidden", "true");
+      choice.append(input);
+      choice.append(copy);
+      options.append(choice);
+    }
+    fieldset.append(options);
+    return fieldset;
+  };
+
   const buildField = (field) => {
     const wrapper = document.createElement("div");
-    wrapper.className = "ads-field" + (field.name === "phone" ? " is-wide" : "");
+    wrapper.className = "ads-field";
     const id = "ads-demo-" + field.name;
     const label = appendText(wrapper, "label", "", field.label);
     label.htmlFor = id;
-
-    let control;
-    if (field.type === "select") {
-      control = document.createElement("select");
-      const empty = document.createElement("option");
-      empty.value = "";
-      empty.textContent = "Choose one";
-      control.append(empty);
-      for (const value of field.options) {
-        const option = document.createElement("option");
-        option.value = value;
-        option.textContent = value;
-        control.append(option);
-      }
-    } else {
-      control = document.createElement("input");
-      control.type = field.type;
-      if (field.inputMode) control.inputMode = field.inputMode;
-      if (field.pattern) control.pattern = field.pattern;
-      if (field.placeholder) control.placeholder = field.placeholder;
-      if (field.autocomplete) control.autocomplete = field.autocomplete;
-    }
+    const control = document.createElement("input");
+    control.type = field.type;
+    if (field.inputMode) control.inputMode = field.inputMode;
+    if (field.pattern) control.pattern = field.pattern;
+    if (field.placeholder) control.placeholder = field.placeholder;
+    if (field.autocomplete) control.autocomplete = field.autocomplete;
     control.id = id;
     control.name = field.name;
     control.required = field.required;
@@ -178,7 +186,16 @@
     form.className = "ads-lead-form";
     form.dataset.adsLeadForm = CAMPAIGN.id;
     form.autocomplete = "off";
-    for (const field of CAMPAIGN.fields) form.append(buildField(field));
+    for (const field of CAMPAIGN.qualifiers) form.append(buildChoiceField(field));
+
+    const contactStep = document.createElement("div");
+    contactStep.className = "ads-contact-step";
+    contactStep.hidden = true;
+    appendText(contactStep, "p", "ads-contact-prompt", "Where should the matches land?");
+    const contactFields = document.createElement("div");
+    contactFields.className = "ads-contact-fields";
+    for (const field of CAMPAIGN.fields) contactFields.append(buildField(field));
+    contactStep.append(contactFields);
 
     const consent = document.createElement("label");
     consent.className = "ads-consent";
@@ -187,11 +204,19 @@
     checkbox.name = "contactConsent";
     checkbox.required = true;
     consent.append(checkbox, document.createTextNode(CAMPAIGN.consent));
-    form.append(consent);
+    contactStep.append(consent);
 
-    const submit = appendText(form, "button", "ads-lead-submit", "Find my matches");
+    const submit = appendText(contactStep, "button", "ads-lead-submit", "Show my matches");
     submit.type = "submit";
-    appendText(form, "p", "ads-lead-fineprint", CAMPAIGN.disclosure + ". Investor demo only. Nothing entered here is transmitted or retained.");
+    appendText(contactStep, "p", "ads-lead-fineprint", CAMPAIGN.disclosure + ". Investor demo only. Nothing entered here is transmitted or retained.");
+    form.append(contactStep);
+
+    const revealContactStep = () => {
+      const ready = CAMPAIGN.qualifiers.every((field) => form.querySelector(`input[name="${field.name}"]:checked`));
+      contactStep.hidden = !ready;
+      contactStep.setAttribute("aria-hidden", String(!ready));
+    };
+    form.addEventListener("change", revealContactStep);
 
     form.addEventListener("submit", (event) => {
       event.preventDefault();
@@ -224,7 +249,16 @@
         button.prepend(tag);
       }
     }
-    if (normalize(query) === sponsoredQuery) renderLeadCard(root);
+    const sponsoredAnswer = normalize(query) === sponsoredQuery;
+    const followForm = document.querySelector("#followForm");
+    if (sponsoredAnswer) {
+      root.querySelector(".door-zone")?.remove();
+      root.querySelector(".name-ritual")?.remove();
+      followForm?.setAttribute("hidden", "");
+      renderLeadCard(root);
+    } else {
+      followForm?.removeAttribute("hidden");
+    }
   };
 
   window.WHY_ADS_DEMO = Object.freeze({
@@ -235,4 +269,3 @@
     decorate,
   });
 })();
-
