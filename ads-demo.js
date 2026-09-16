@@ -249,14 +249,11 @@
       strong.textContent = "You're set.";
       success.append(strong, document.createTextNode(" In production, this opt-in would trigger the advertiser's $" + CAMPAIGN.bidDollars + " bid. Keep following the path."));
       form.replaceWith(success);
-      const doorZone = root.querySelector(".door-zone");
-      doorZone?.removeAttribute("hidden");
-      document.querySelector("#followForm")?.removeAttribute("hidden");
-      const firstDoor = doorZone?.querySelector(".curiosity-door");
-      requestAnimationFrame(() => {
-        if (!matchMedia("(prefers-reduced-motion: reduce)").matches) doorZone?.scrollIntoView({ behavior: "smooth", block: "center" });
-        firstDoor?.focus({ preventScroll: true });
-      });
+      setTimeout(() => {
+        document.dispatchEvent(new CustomEvent("why:ads-lead-complete", {
+          detail: { campaignId: CAMPAIGN.id },
+        }));
+      }, 320);
     });
 
     card.append(form);
@@ -275,12 +272,15 @@
         const tag = document.createElement("small");
         tag.className = "ads-sponsor-tag";
         tag.textContent = "Sponsored";
-        button.prepend(tag);
+        const question = button.querySelector(":scope > span");
+        if (question) question.after(tag);
+        else button.append(tag);
       }
     }
     const sponsoredAnswer = normalize(query) === sponsoredQuery;
     const followForm = document.querySelector("#followForm");
     if (sponsoredAnswer) {
+      root.querySelector(".node-answer > .prose")?.setAttribute("hidden", "");
       root.querySelector(".door-zone")?.setAttribute("hidden", "");
       root.querySelector(".name-ritual")?.remove();
       followForm?.setAttribute("hidden", "");

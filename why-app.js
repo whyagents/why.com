@@ -3869,6 +3869,15 @@
     scheduleHomeHeroRotation();
   });
 
+  if (ADS_DEMO) {
+    document.addEventListener("why:ads-lead-complete", () => {
+      const nodes = completedNodes(active);
+      const previousOrganicNode = nodes.length > 1 ? nodes[nodes.length - 2] : null;
+      if (!active || !previousOrganicNode) return;
+      restorePathNode(active.id, previousOrganicNode.id);
+    });
+  }
+
   document.addEventListener("click", (event) => {
     const receipt = event.target.closest("[data-receipts]");
     if (receipt) { requestReceipts(receipt); return; }

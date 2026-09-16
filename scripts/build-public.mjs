@@ -77,7 +77,7 @@ const adsPage = appShell
   .replace("</head>", adsStyles + "</head>")
   .replace(
     /<script src="why-app\.js[^>]*><\/script>/,
-    '<script src="ads-demo.js?v=20260915-04" defer></script>\n  <script src="why-app.js?v=20260915-ads02" defer></script>',
+    '<script src="ads-demo.js?v=20260915-05" defer></script>\n  <script src="why-app.js?v=20260915-ads03" defer></script>',
   );
 await writeFile(join(outputRoot, "ads.html"), adsPage);
 

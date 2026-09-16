@@ -19,11 +19,12 @@
       const response = await fetch("index.html", { cache: "no-store" });
       let html = await response.text();
       const closingScript = "<" + "/script>";
-      const adapterTag = '<script src="ads-demo.js?v=20260915-04" defer>' + closingScript;
+      const adapterTag = '<script src="ads-demo.js?v=20260915-05" defer>' + closingScript;
       const demoStyles = `
         <style>
           .ads-demo-note{display:inline-flex;align-items:center;justify-content:center;cursor:default;opacity:.78}
-          .ads-sponsor-tag{display:block;margin-bottom:.48rem;color:#d97969;font-family:"DM Sans",sans-serif;font-size:.5rem;font-style:normal;font-weight:700;letter-spacing:.18em;line-height:1.35;text-transform:uppercase}
+          .curiosity-door.is-sponsored>span{display:inline}
+          .ads-sponsor-tag{display:inline-block;margin-left:.55rem;color:#d97969;font-family:"DM Sans",sans-serif;font-size:.5rem;font-style:normal;font-weight:700;letter-spacing:.18em;line-height:1.35;text-transform:uppercase;vertical-align:middle}
           .ads-lead-card{margin:2rem 0 .35rem;padding:1.5rem 0 0;border-top:1px solid rgba(240,235,224,.12)}
           .ads-lead-eyebrow{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1.15rem;color:var(--mid);font-family:"DM Sans",sans-serif;font-size:.54rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase}
           .ads-lead-bid{color:var(--mid);white-space:nowrap}
@@ -35,7 +36,7 @@
           .ads-choice-row{display:flex;flex-wrap:wrap;gap:.45rem}
           .ads-choice{position:relative;cursor:pointer}
           .ads-choice input{position:absolute;opacity:0;pointer-events:none}
-          .ads-choice span{display:block;padding:.56rem .82rem;border:1px solid rgba(240,235,224,.24);border-radius:2px;color:var(--mid);background:transparent;font-family:"DM Sans",sans-serif;font-size:.74rem;transition:border-color .2s,color .2s,transform .2s}
+          .ads-choice span{display:block;padding:.56rem .82rem;border:1px solid rgba(240,235,224,.24);border-radius:10px;color:var(--mid);background:transparent;font-family:"DM Sans",sans-serif;font-size:.74rem;transition:border-color .2s,color .2s,transform .2s}
           .ads-choice:hover span{border-color:rgba(240,235,224,.52);color:var(--hi);background:transparent}
           .ads-choice input:focus-visible + span{outline:1px solid var(--gold-hi);outline-offset:2px}
           .ads-choice input:checked + span{border-color:var(--hi);color:var(--hi);background:transparent;transform:translateY(-1px)}
@@ -64,7 +65,7 @@
         .replace("<body>", '<body data-ads-demo="true">')
         .replace("<title>WHY.</title>", "<title>AI-Native Advertising Demo — WHY.</title>")
         .replace("</head>", '<meta name="robots" content="noindex,nofollow">' + demoStyles + "</head>")
-        .replace(/<script src="why-app\.js[^>]*><\/script>/, adapterTag + '\n  <script src="why-app.js?v=20260915-ads02" defer>' + closingScript);
+        .replace(/<script src="why-app\.js[^>]*><\/script>/, adapterTag + '\n  <script src="why-app.js?v=20260915-ads03" defer>' + closingScript);
       document.open();
       document.write(html);
       document.close();

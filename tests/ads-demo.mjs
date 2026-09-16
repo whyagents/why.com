@@ -33,7 +33,7 @@ const clientDoorLoader = client.slice(client.indexOf("async function fetchDoors"
 console.log("\n[AI-native advertising demo] complete sponsored journey");
 check("the page reuses the WHY shell", page.includes('fetch("index.html"') && page.includes('data-ads-demo="true"'));
 check("the page is explicitly excluded from search", page.includes('name="robots" content="noindex,nofollow"'));
-check("the adapter loads before the shared client", page.includes("ads-demo.js?v=20260915-04") && page.includes("why-app.js?v=20260915-ads02"));
+check("the adapter loads before the shared client", page.includes("ads-demo.js?v=20260915-05") && page.includes("why-app.js?v=20260915-ads03"));
 check("the adapter makes no network or persistence call", !/\b(?:fetch|XMLHttpRequest|sendBeacon|localStorage|sessionStorage)\b/.test(adapterSource));
 check("the campaign starts with three native choices", adapter.homeChoices.length === 3);
 check("the first three answer boards each contain exactly three paths", [first, second, third].every((result) => result.voiceNote.pulls.length === 3));
@@ -52,10 +52,12 @@ check("the sponsored path uses only the minimal label", !adapterSource.includes(
 check("the illustrative economics are explicit", adapter.campaign.bidDollars === 100 && adapterSource.includes("qualified-lead bid"));
 check("lead capture asks for only four useful signals", adapter.campaign.qualifiers.length === 2 && adapter.campaign.fields.length === 2 && adapter.campaign.fields.some((field) => field.name === "email" && field.required));
 check("tap choices reveal one compact contact step", adapterSource.includes('input.type = "radio"') && adapterSource.includes("contactStep.hidden = !ready"));
-check("qualifier controls are transparent rectangles in every state", page.includes('.ads-choice span{display:block') && page.includes('border-radius:2px') && page.includes('.ads-choice input:checked + span{border-color:var(--hi);color:var(--hi);background:transparent'));
+check("qualifier controls are transparent rounded rectangles in every state", page.includes('.ads-choice span{display:block') && page.includes('border-radius:10px') && page.includes('.ads-choice input:checked + span{border-color:var(--hi);color:var(--hi);background:transparent'));
 check("the lead moment temporarily hides competing questions and composer", adapterSource.includes('root.querySelector(".door-zone")?.setAttribute("hidden", "")') && adapterSource.includes('followForm?.setAttribute("hidden", "")'));
-check("a valid opt-in restores the exact curiosity path", adapterSource.includes('doorZone?.removeAttribute("hidden")') && adapterSource.includes('document.querySelector("#followForm")?.removeAttribute("hidden")'));
-check("the restored path receives an accessible continuation focus", adapterSource.includes('firstDoor?.focus({ preventScroll: true })'));
+check("the sponsored lead moment hides the ordinary answer copy", adapterSource.includes('root.querySelector(".node-answer > .prose")?.setAttribute("hidden", "")'));
+check("a valid opt-in requests return to the organic path", adapterSource.includes('new CustomEvent("why:ads-lead-complete"') && !adapterSource.includes('doorZone?.removeAttribute("hidden")'));
+check("the shared client restores the preceding completed path locally", client.includes('document.addEventListener("why:ads-lead-complete"') && client.includes('nodes[nodes.length - 2]') && client.includes('restorePathNode(active.id, previousOrganicNode.id)'));
+check("the sponsor tag follows the visible question", adapterSource.includes('const question = button.querySelector(":scope > span")') && adapterSource.includes('question.after(tag)') && page.includes('.ads-sponsor-tag{display:inline-block'));
 check("the lead surface stays visually native", page.includes(".ads-choice-row") && !page.includes("background:linear-gradient") && !page.includes("border:1px solid rgba(196,170,114,.34)"));
 check("the submit control is transparent and rectangular", page.includes(".ads-lead-submit") && page.includes("border-radius:2px") && page.includes("background:transparent"));
 check("the demo states that form data is never transmitted or retained", adapterSource.includes("Nothing entered here is transmitted or retained."));
