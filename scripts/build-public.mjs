@@ -70,13 +70,14 @@ const adsTemplate = await readFile(join(projectRoot, "ads.html"), "utf8");
 const adsStyles = adsTemplate.match(/const demoStyles = `([\s\S]*?)`;/)?.[1];
 if (!adsStyles) throw new Error("The advertising demo styles could not be extracted.");
 const adsPage = appShell
+  .replace(/(<script id="Cookiebot"[^>]*?)\s+src="[^"]+"/i, "$1")
   .replace("<body>", '<body data-ads-demo="true">')
   .replace("<title>WHY.</title>", "<title>AI-Native Advertising Demo — WHY.</title>")
   .replace(/<meta name="robots" content="[^"]*">/, '<meta name="robots" content="noindex,nofollow">')
   .replace("</head>", adsStyles + "</head>")
   .replace(
     /<script src="why-app\.js[^>]*><\/script>/,
-    '<script src="ads-demo.js?v=20260915-03" defer></script>\n  <script src="why-app.js?v=20260915-ads01" defer></script>',
+    '<script src="ads-demo.js?v=20260915-04" defer></script>\n  <script src="why-app.js?v=20260915-ads02" defer></script>',
   );
 await writeFile(join(outputRoot, "ads.html"), adsPage);
 

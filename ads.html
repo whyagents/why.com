@@ -19,7 +19,7 @@
       const response = await fetch("index.html", { cache: "no-store" });
       let html = await response.text();
       const closingScript = "<" + "/script>";
-      const adapterTag = '<script src="ads-demo.js?v=20260915-03" defer>' + closingScript;
+      const adapterTag = '<script src="ads-demo.js?v=20260915-04" defer>' + closingScript;
       const demoStyles = `
         <style>
           .ads-demo-note{display:inline-flex;align-items:center;justify-content:center;cursor:default;opacity:.78}
@@ -35,10 +35,10 @@
           .ads-choice-row{display:flex;flex-wrap:wrap;gap:.45rem}
           .ads-choice{position:relative;cursor:pointer}
           .ads-choice input{position:absolute;opacity:0;pointer-events:none}
-          .ads-choice span{display:block;padding:.56rem .82rem;border-radius:999px;color:var(--mid);background:rgba(240,235,224,.055);font-family:"DM Sans",sans-serif;font-size:.74rem;transition:background .2s,color .2s,transform .2s}
-          .ads-choice:hover span{color:var(--hi);background:rgba(240,235,224,.09)}
+          .ads-choice span{display:block;padding:.56rem .82rem;border:1px solid rgba(240,235,224,.24);border-radius:2px;color:var(--mid);background:transparent;font-family:"DM Sans",sans-serif;font-size:.74rem;transition:border-color .2s,color .2s,transform .2s}
+          .ads-choice:hover span{border-color:rgba(240,235,224,.52);color:var(--hi);background:transparent}
           .ads-choice input:focus-visible + span{outline:1px solid var(--gold-hi);outline-offset:2px}
-          .ads-choice input:checked + span{color:var(--ink);background:var(--hi);transform:translateY(-1px)}
+          .ads-choice input:checked + span{border-color:var(--hi);color:var(--hi);background:transparent;transform:translateY(-1px)}
           .ads-contact-step{display:grid;gap:.82rem;margin-top:.2rem;padding-top:1.15rem;border-top:1px solid rgba(240,235,224,.1)}
           .ads-contact-step[hidden]{display:none}
           .ads-contact-fields{display:grid;grid-template-columns:minmax(100px,.55fr) minmax(210px,1.45fr);gap:1rem}
@@ -60,10 +60,11 @@
           }
         </style>`;
       html = html
+        .replace(/(<script id="Cookiebot"[^>]*?)\s+src="[^"]+"/i, "$1")
         .replace("<body>", '<body data-ads-demo="true">')
         .replace("<title>WHY.</title>", "<title>AI-Native Advertising Demo — WHY.</title>")
         .replace("</head>", '<meta name="robots" content="noindex,nofollow">' + demoStyles + "</head>")
-        .replace(/<script src="why-app\.js[^>]*><\/script>/, adapterTag + '\n  <script src="why-app.js?v=20260915-ads01" defer>' + closingScript);
+        .replace(/<script src="why-app\.js[^>]*><\/script>/, adapterTag + '\n  <script src="why-app.js?v=20260915-ads02" defer>' + closingScript);
       document.open();
       document.write(html);
       document.close();

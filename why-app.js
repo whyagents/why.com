@@ -1530,6 +1530,10 @@
   }
 
   async function loadDailyWhy() {
+    if (ADS_DEMO) {
+      dailyLoadState = "failed";
+      return;
+    }
     const requestedEpisode = DAILY_PAGE_ID;
     const apiUrl = requestedEpisode ? `/api/daily-why?episode=${encodeURIComponent(requestedEpisode)}` : "/api/daily-why";
     const staticUrl = requestedEpisode ? `/daily/${encodeURIComponent(requestedEpisode)}/episode.json` : "/daily-why.json";
@@ -2729,6 +2733,21 @@
   }
 
   async function fetchDoors(context, signal, answerText, priorDomain) {
+    if (ADS_DEMO) {
+      await wait(60);
+      if (signal?.aborted) throw signal.reason;
+      const preview = ADS_ADAPTER.answer({
+        query: context.query,
+        domain: priorDomain || context.payload.path?.domain || guessDomain(context.query),
+      });
+      const normalized = normalizeResponse(preview, context.query, priorDomain || context.payload.path?.domain || "");
+      return {
+        doorState: normalized.doorState,
+        voiceNote: normalized.voiceNote,
+        domain: normalized.domain,
+        doorGeneration: { status: "offline_ads_demo", attempts: 1, candidateCount: normalized.voiceNote.pulls.length },
+      };
+    }
     const response = await fetch("/api/ultimate-search", {
       method: "POST",
       headers: { "Content-Type": "application/json" },

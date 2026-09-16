@@ -46,10 +46,22 @@
     "When should you walk away from a deal?",
   ]);
 
-  const CONTINUE = Object.freeze([
+  const CONTINUE_ONE = Object.freeze([
     "What should you test on a drive?",
     "Which fees deserve a hard no?",
     "When does financing become the trap?",
+  ]);
+
+  const CONTINUE_TWO = Object.freeze([
+    "Why does road noise matter more than horsepower?",
+    "Which dealer add-ons are mostly margin?",
+    "When does a longer loan become more expensive?",
+  ]);
+
+  const CONTINUE_THREE = Object.freeze([
+    "What does parking reveal about daily fit?",
+    "Who profits when buyers fear walking away?",
+    "How do warranties hide future costs?",
   ]);
 
   const ANSWERS = new Map([
@@ -68,6 +80,12 @@
     ["what should you test on a drive?", "test the boring parts: visibility, parking, seat comfort, phone pairing and road noise. ten quiet annoyances will outlive one dramatic acceleration pull."],
     ["which fees deserve a hard no?", "question every fee that does not change the car or satisfy the government. vague protection packages and dealer add-ons often exist because confusion has excellent margins."],
     ["when does financing become the trap?", "financing becomes the trap when affordability depends on extending the loan beyond the car's dependable years. the payment looks smaller while the risk compounds."],
+    ["why does road noise matter more than horsepower?", "horsepower performs for ten seconds. road noise rides with you for ten years, turning every commute, phone call and quiet moment into a small daily tax."],
+    ["which dealer add-ons are mostly margin?", "paint coatings, nitrogen tires and vague protection bundles often carry more dealer margin than customer value. the name sounds technical; the invoice does the real work."],
+    ["when does a longer loan become more expensive?", "a longer loan lowers today's payment by renting money for more years. interest grows while the car depreciates, leaving the owner paying after the excitement—and sometimes the warranty—expires."],
+    ["what does parking reveal about daily fit?", "parking exposes the life a test drive hides. width, visibility and turning radius matter more on a crowded Tuesday than they ever will under showroom lights."],
+    ["who profits when buyers fear walking away?", "the seller does. urgency makes comparison feel dangerous, so mystery fees and weak financing survive because leaving now feels more costly than regretting later."],
+    ["how do warranties hide future costs?", "a warranty can make risk feel solved while exclusions, deductibles and expiration dates push expensive repairs back onto the owner. protection is only real where the fine print agrees."],
   ]);
 
   const normalize = (value) => String(value || "").trim().toLowerCase().replace(/[.!]+$/g, "");
@@ -77,7 +95,10 @@
     if (HOME_CHOICES.some((choice) => normalize(choice.query) === normalized)) return DEPTH_TWO;
     if (DEPTH_TWO.some((candidate) => normalize(candidate) === normalized)) return DEPTH_THREE;
     if (DEPTH_THREE.some((candidate) => normalize(candidate) === normalized)) return DEPTH_FOUR;
-    return CONTINUE;
+    if (DEPTH_FOUR.some((candidate) => normalize(candidate) === normalized)) return CONTINUE_ONE;
+    if (CONTINUE_ONE.some((candidate) => normalize(candidate) === normalized)) return CONTINUE_TWO;
+    if (CONTINUE_TWO.some((candidate) => normalize(candidate) === normalized)) return CONTINUE_THREE;
+    return CONTINUE_ONE;
   };
 
   const answer = ({ query = "", domain = "public" } = {}) => {
