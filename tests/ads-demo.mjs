@@ -47,7 +47,7 @@ check("no continuation board immediately repeats its selected question", [
   ...continuationOne[0].voiceNote.pulls.map((door, index) => [door.query, continuationTwo[index]]),
   ...continuationTwo[0].voiceNote.pulls.map((door, index) => [door.query, continuationThree[index]]),
 ].every(([query, result]) => !result.voiceNote.pulls.some((door) => door.query.toLowerCase() === query.toLowerCase())));
-check("the sample campaign is conspicuously disclosed", adapter.campaign.disclosure.includes("no affiliation") && adapterSource.includes('tag.textContent = "Sponsored"'));
+check("the sample campaign is conspicuously disclosed", adapter.campaign.disclosure.includes("no affiliation") && adapterSource.includes('tag.textContent = "Sponsored\\nQuestions"'));
 check("the sponsored path uses only the minimal label", !adapterSource.includes("Sponsored · Cars.com example") && page.includes("color:#d97969"));
 check("the illustrative economics are explicit", adapter.campaign.bidDollars === 100 && adapterSource.includes("qualified-lead bid"));
 check("lead capture asks for only four useful signals", adapter.campaign.qualifiers.length === 2 && adapter.campaign.fields.length === 2 && adapter.campaign.fields.some((field) => field.name === "email" && field.required));
@@ -58,6 +58,7 @@ check("the sponsored lead moment hides the ordinary answer copy", adapterSource.
 check("a valid opt-in requests return to the organic path", adapterSource.includes('new CustomEvent("why:ads-lead-complete"') && !adapterSource.includes('doorZone?.removeAttribute("hidden")'));
 check("the shared client restores the preceding completed path locally", client.includes('document.addEventListener("why:ads-lead-complete"') && client.includes('nodes[nodes.length - 2]') && client.includes('restorePathNode(active.id, previousOrganicNode.id)'));
 check("the sponsor tag follows the visible question", adapterSource.includes('const question = button.querySelector(":scope > span")') && adapterSource.includes('question.after(tag)') && page.includes('.ads-sponsor-tag{display:inline-block'));
+check("the lead CTA is concise", adapterSource.includes('appendText(contactStep, "button", "ads-lead-submit", "Submit")'));
 check("the lead surface stays visually native", page.includes(".ads-choice-row") && !page.includes("background:linear-gradient") && !page.includes("border:1px solid rgba(196,170,114,.34)"));
 check("the submit control is transparent and rectangular", page.includes(".ads-lead-submit") && page.includes("border-radius:2px") && page.includes("background:transparent"));
 check("the demo states that form data is never transmitted or retained", adapterSource.includes("Nothing entered here is transmitted or retained."));

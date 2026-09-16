@@ -227,7 +227,7 @@
     consent.append(checkbox, document.createTextNode(CAMPAIGN.consent));
     contactStep.append(consent);
 
-    const submit = appendText(contactStep, "button", "ads-lead-submit", "Show my matches");
+    const submit = appendText(contactStep, "button", "ads-lead-submit", "Submit");
     submit.type = "submit";
     appendText(contactStep, "p", "ads-lead-fineprint", CAMPAIGN.disclosure + ". Investor demo only. Nothing entered here is transmitted or retained.");
     form.append(contactStep);
@@ -271,7 +271,7 @@
       if (!button.querySelector(".ads-sponsor-tag")) {
         const tag = document.createElement("small");
         tag.className = "ads-sponsor-tag";
-        tag.textContent = "Sponsored";
+        tag.textContent = "Sponsored\nQuestions";
         const question = button.querySelector(":scope > span");
         if (question) question.after(tag);
         else button.append(tag);
