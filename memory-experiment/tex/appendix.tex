@@ -1,0 +1,51 @@
+\section{Environment and memory parameters}
+\label{app:params}
+\begin{table}[H]
+\centering\small
+\begin{tabular}{@{}lp{9.6cm}@{}}
+\toprule
+Parameter & Value\\
+\midrule
+Horizon & 60 days, 100 decisions per day (plus 20 poison episodes per day on days 25--34 in poisoning scenarios)\\
+Options and features & 3 options; 8 rule features (4 active per family), agreeableness, 3 distractors; intercept\\
+True weights & $|\theta^\ast_j|\sim U(0.6,1.8)$ with random signs; agreeableness $-0.3$; distractors 0; family offsets $\mathcal N(0,0.3^2)$\\
+Families & 8 training, 3 held-out (new combinations of rule features)\\
+Routine prototypes & 2 per training family; 35\% of decisions; per-feature noise $\mathcal N(0,0.05^2)$\\
+Stakes & $\text{LogNormal}(\mu_f,0.5)$, $\mu_f\in\{0,0.6,1.2\}$ by tier\\
+Resolution & tiers 0/1/2: same day 70/50/30\%, delayed 1--6 days 10/30/50\%, never 20\%\\
+Channels & self-report 30\% (label flip 20\%), verified 70\% (no flips)\\
+Shocks & probability 0.07 per day after day 5; 60\% of that day's resolving outcomes forced to failure\\
+Approval & $P(\text{up})=\sigma(1.5\,g+1.5\,(2p^\ast-1))$\\
+Drama & $2\cdot\text{Bernoulli}(0.15)+\mathcal N(0,0.3^2)$; 2.5 for poison episodes\\
+World change & two largest rule weights flip sign at night 30\\
+Agent & Bayesian logistic regression, prior $\mathcal N(0,1.5^2I)$, damped Newton with Armijo backtracking, Laplace posterior, Thompson sampling\\
+Memory & buffer $H=8$ days; budget $b=20$ per night; capacity $C=300$; FIFO eviction for all policies\\
+WHY constants & $\epsilon=0.05$, $\lambda_M=0.7$, $K=\sigma(-2(|z|-3))$, RBF length-scale$^2=8$ on features, $T$ reference window 2 days\\
+Probes & 500 training-family tasks (with routine share), 500 held-out-family tasks\\
+Seeds & development 1000--1004; evaluation 0--19\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Full results}
+\label{app:full}
+\input{tab_full.tex}
+
+\section{Implementation notes}
+\label{app:impl}
+\paragraph{Causal confidence.} For each resolution day $d$ in the buffer window, we collect every episode whose outcome resolved on $d$ (at least 10), compute the mean residual $\bar r_d=\overline{y-\hat p}$ under the current model and its standard error $\sqrt{\sum\hat p(1-\hat p)}/n_d$, and standardize $\bar r_d$ against the median residual of the previous seven resolution days (at least three available). Episodes resolving on day $d$ receive $K=\sigma(-2(|z_d|-3))$.
+
+\paragraph{Retroactive tagging without rescoring (ablation).} Each episode is considered only on the night it occurred. If its outcome is unresolved, $S$ is replaced by its expectation $2\hat p(1-\hat p)$, $K=1$, and $M=0.5$; if it is not selected that night, it is never reconsidered.
+
+\paragraph{Tag propagation (variant).} Among episodes whose outcomes resolved tonight, those in the top decile of $S\cdot C$ propagate a boost $\max_j k(x_i,x_j)\,S_jC_j$ to the transferability of every buffered candidate $i$, renormalized.
+
+\paragraph{Oracle.} At each greedy step the oracle evaluates, for every candidate whose outcome will eventually resolve, the true decision quality of the policy after a one-step Laplace update with the label the episode will carry (including corrupted or poisoned labels), and picks the best.
+
+\section{Protocol deviations and reproducibility}
+\label{app:deviations}
+\begin{enumerate}
+\item \textbf{PER-faithful baseline.} During development the surprise baseline selected the $b$ most surprising episodes. It collapsed, so to avoid a strawman we made the main surprise baseline PER-style stochastic prioritization; the greedy version is still reported.
+\item \textbf{Common random numbers.} World generation was restructured so every random variable is drawn unconditionally and poison episodes come from a separate generator, which made scenario comparisons paired. This fixed a development-time bug.
+\item \textbf{Solver bug and full re-run.} After the first evaluation run, an outlier (keep everything, seed 12, decision quality 0.73) was traced to the undamped Newton solver oscillating without converging on some large or ill-conditioned memories. It affected several policies on some seeds and inflated the method's apparent advantage. We replaced it with damped Newton plus Armijo backtracking, discarded the first evaluation run, and re-ran every suite. Across all \val{diag-nruns} reported runs, the largest final gradient norm of any nightly fit is $\val{diag-maxgrad}$.
+\end{enumerate}
+No policy definition, environment parameter, or WHY constant was changed after development began. Code, configuration, raw per-run results, and the scripts that generate every number, table, and figure in this draft accompany it.

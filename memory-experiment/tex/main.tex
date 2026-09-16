@@ -1,0 +1,316 @@
+\documentclass[11pt]{article}
+\usepackage[letterpaper,margin=1in]{geometry}
+\usepackage{mathptmx}
+\usepackage[scaled=0.9]{helvet}
+\usepackage[T1]{fontenc}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs,multirow,threeparttable,float}
+\usepackage{graphicx}
+\usepackage[table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,fit,backgrounds}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{enumitem}
+\usepackage[most]{tcolorbox}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+\definecolor{whyblue}{HTML}{2A78D6}
+\definecolor{ink}{HTML}{0B0B0B}
+\definecolor{ink2}{HTML}{52514E}
+\definecolor{muted}{HTML}{898781}
+\definecolor{hair}{HTML}{E1E0D9}
+\definecolor{wash}{HTML}{F4F3EF}
+\usepackage[colorlinks=true,linkcolor=ink2,citecolor=whyblue,urlcolor=whyblue]{hyperref}
+\setlist{nosep,leftmargin=1.4em}
+\input{numbers.tex}
+\input{abstract_results.tex}
+\newcommand{\WHY}{\textsc{why}}
+\newcommand{\eqname}[1]{\textsf{#1}}
+
+\title{\vspace{-1.2em}\textbf{Every Memory Needs a WHY}\\[6pt]
+\large Outcome-Grounded Memory Consolidation for Continual AI Agents}
+\author{WHY Research\quad$\cdot$\quad why.com\quad$\cdot$\quad Ockams Inc.\\[4pt]
+\small\color{ink2} Working draft v0.1 $\cdot$ September 2026 $\cdot$ Not peer reviewed $\cdot$ Code and raw results accompany this draft}
+\date{}
+
+\begin{document}
+\maketitle
+\vspace{-1.5em}
+
+\begin{abstract}
+\noindent Memory is becoming a standard component of AI agents, and any memory with finite capacity is a selection policy. Many write policies decide what to keep from signals available when an experience happens: recency, frequency, similarity, a model's own importance rating, or user approval. We argue that consolidation should instead target \emph{counterfactual learning value}, the improvement in future decisions caused by keeping an experience, and that because this value cannot be observed at write time, consolidation should wait for consequences. We propose \emph{consequence-weighted consolidation}. Episodes stay in a short-lived buffer until their outcomes resolve. Each receives a \WHY{} score combining surprise, consequence, causal confidence, transferability, and uncertainty reduction, discounted when the outcome arrived through a manipulable channel, and episodes are rescored every night so a later outcome can retroactively promote an earlier experience. We test the hypothesis in a controlled simulation (60 days, 6{,}000 decisions, 13 policies, 5 scenarios, 20 seeds) using a Bayesian agent whose durable memory is capped at 300 episodes and whose counterfactual memory value is computable. \AbstractResults{} We release code and preregister an LLM-agent study with explicit falsification criteria.
+\end{abstract}
+
+%=====================================================================
+\section{Introduction}
+
+Agent memory has become a product category: longer context windows, vector stores, memory operating systems, and assistants that promise to remember everything \citep{packer2023,chhikara2025mem0,xu2025amem,zhong2024memorybank}. But capacity is always finite, whether it is measured in context tokens, retrieval precision, or the compute and interference cost of writing experience into weights. So every memory system is a selection policy. Something decides what is written, what is kept, and what is allowed to shape future behavior.
+
+Many published and deployed write policies make that decision with signals available at write time: how recent an experience is, how often similar experiences recur, how similar it is to current queries, how important the model itself rates it (Generative Agents asks the model to score poignancy from 1 to 10 \citep{park2023}), how emotionally salient it is (a recent sleep-inspired design weights emotional valence directly \citep{shinde2026scm}), or whether the user approved. A growing line of work uses task outcomes instead. Memory-R1 learns memory operations with outcome rewards \citep{yan2025memoryr1}; ReasoningBank distills strategies from self-judged successes and failures \citep{ouyang2025reasoningbank}; TraceRetain scores retention with success and downstream-utility features \citep{reddy2026traceretain}; Memory Worth tracks how often a memory co-occurs with success \citep{simsek2026worth}. These systems are typically evaluated where the environment reports success immediately and reliably, such as household tasks or question answering.
+
+Deployed agents rarely get that. Consequences arrive late: a forecast resolves in weeks, and a code change fails in production days after it shipped. They are partial, because most interactions never report back. They are unreliable, because people misremember and misreport. They are confounded, because an outage fails every action taken that day. And they are adversarial, because memory injection attacks can write misleading experiences through ordinary interaction \citep{dong2025minja,chen2024agentpoison}. The most available signal, approval, is also the most dangerous. OpenAI's postmortem of an April 2025 GPT-4o update attributes part of a sycophancy regression to an added reward signal built from thumbs-up and thumbs-down data, noting that ``user feedback in particular can sometimes favor more agreeable responses'' \citep{openai2025sycophancy}.
+
+We argue that the target of consolidation should be counterfactual learning value: an experience deserves to change a system's future behavior if keeping it measurably improves future decisions. Approval tells you how something felt. Outcomes tell you what happened. Because learning value cannot be observed when an experience occurs, a consolidation policy should wait for consequences, weigh them by how attributable and trustworthy they are, and revise its judgment when a later outcome reveals that an earlier experience mattered.
+
+\begin{tcolorbox}[colback=wash,colframe=wash,boxrule=0pt,left=6pt,right=6pt,top=4pt,bottom=4pt]
+\textbf{Hypothesis.} Given limited consolidation capacity, selecting episodes according to verified downstream learning value produces better future decision-making than FIFO memory, similarity-based retrieval, recurrence-based consolidation, self-rated salience, or user-preference signals.
+\end{tcolorbox}
+
+\paragraph{Contributions.}
+\begin{enumerate}
+\item A formulation of consolidation as budgeted selection that targets counterfactual memory value, with a greedy counterfactual oracle as a reference (Section~\ref{sec:formulation}).
+\item \emph{Consequence-weighted consolidation}: a \WHY{} score, deferral until outcomes resolve with nightly rescoring (retroactive tagging), discounting of manipulable outcome channels, and redundancy control through sequential posterior updates, run as an offline dream cycle (Section~\ref{sec:method}).
+\item A controlled environment that independently varies outcome delay, verification, exogenous confounds, approval bias, poisoning, and nonstationarity, and a comparison of 13 policies across 5 scenarios and 20 seeds, with ablations and sweeps. We report the conditions where the method loses (Sections~\ref{sec:setup}--\ref{sec:results}).
+\item A preregistered protocol for LLM agents, with falsification criteria (Section~\ref{sec:prereg}).
+\end{enumerate}
+
+\paragraph{Scope.} Experiment~1 uses a Bayesian logistic agent, not a language model. It isolates the selection principle in a setting where the true value of a memory can be computed. It does not show that the principle transfers to LLM agents; Section~\ref{sec:prereg} specifies the experiment that would.
+
+%=====================================================================
+\section{Background and related work}
+\label{sec:related}
+
+\paragraph{Selective consolidation in brains.} Biological memory is selective. Sleep appears to triage memories rather than strengthen all of them equally \citep{stickgold2013}, and information people expect to need later benefits more from sleep \citep{wilhelm2011}. Emotional arousal modulates consolidation through the amygdala \citep{mcgaugh2004}, and reward modulates hippocampal replay \citep{singer2009,ambrose2016}. Tagging theories propose that weak traces can be stabilized by later, stronger events \citep{frey1997,moncada2007}, and behavioral studies report retroactive memory enhancement for items related to later emotional learning \citep{dunsmoor2015} or reward \citep{patil2017}; the reward effect, however, did not replicate consistently across four experiments \citep{sukumaran2023}. Mattar and Daw formalize replay prioritization as the expected value of a memory access, the product of \emph{gain} (how much a backup improves the policy) and \emph{need} (how often the relevant situation will recur) \citep{mattar2018}. Complementary learning systems theory frames the division of labor between fast episodic storage and slow consolidation \citep{mcclelland1995,kumaran2016}. We use these ideas as design analogies. None of them is evidence for the engineering claim tested here.
+
+\paragraph{Prioritized replay and data valuation.} Prioritized experience replay samples transitions in proportion to their temporal-difference error \citep{schaul2016per}. The value of a single training point can be defined by leave-one-out or influence \citep{koh2017} and generalized with Shapley values \citep{ghorbani2019}; RHO-LOSS selects points that are learnable, worth learning, and not yet learned \citep{mindermann2022}; continual learning has studied which samples to keep in small replay buffers \citep{aljundi2019,chaudhry2019}. Our \eqname{ValueOfMemory} is a leave-one-out value and our \WHY{} score is a cheap proxy for it. What differs is the data: labels arrive late, sometimes never, and through channels of different reliability.
+
+\paragraph{Memory for LLM agents.} Generative Agents retrieve by recency, importance, and relevance \citep{park2023}; MemGPT manages memory tiers \citep{packer2023}; MemoryBank applies a forgetting curve \citep{zhong2024memorybank}; A-MEM and Mem0 organize and update memories \citep{xu2025amem,chhikara2025mem0}; Reflexion stores verbal self-reflections \citep{shinn2023}. Outcome-aware approaches include ReasoningBank \citep{ouyang2025reasoningbank}, Memory-R1 \citep{yan2025memoryr1}, Memory-R2, which reduces credit-assignment bias for memory operations with rerollouts from a shared memory state \citep{yan2026memoryr2}, TraceRetain \citep{reddy2026traceretain}, and Memory Worth, whose authors note that it is associational rather than causal \citep{simsek2026worth}. A recent survey lists continual consolidation, causally grounded retrieval, and learned forgetting among the open problems \citep{du2026survey}.
+
+\paragraph{Consolidation into weights.} Sleep-like replay reduces catastrophic forgetting in artificial networks \citep{tadros2022}. SEAL trains a model to generate its own fine-tuning data using downstream performance as reward \citep{zweiger2025seal}; Titans gates test-time memorization by a surprise signal \citep{behrouz2024titans}; ``Language Models Need Sleep'' consolidates knowledge on an architectural schedule with a dreaming phase for self-improvement \citep{behrouz2026sleep}; sleep-time compute spends offline compute anticipating future queries \citep{lin2025sleeptime}. World-model agents ``dream'' in a different sense, by learning in imagination \citep{hafner2020dreamer}.
+
+\paragraph{What is new here.} We do not claim to introduce outcome-based memory management, replay prioritization, or data valuation. The contribution is narrower. We treat the outcome channel itself (delay, verification, attribution, manipulability) as a first-class input to consolidation; we make consolidation decisions revisable after the fact; and we test these choices against the write-time heuristics that dominate agent memory, and against unbounded memory, in an environment where every policy can be compared with a counterfactual oracle and where the conditions that should matter can be switched on and off.
+
+%=====================================================================
+\section{Problem formulation}
+\label{sec:formulation}
+
+An \emph{episode} $e=(x,a,\hat p,y,\tau,\kappa,v)$ records the decision context and options $x$, the action $a$, the agent's predicted success $\hat p$, the outcome $y\in\{0,1\}$ observed at resolution time $\tau$ (possibly $\infty$) through channel $\kappa\in\{\text{verified},\text{self-report}\}$, and the stakes $v$. The agent keeps a short-lived episodic buffer $B_t$ (the last $H$ days) and a durable memory $M_t$ with $|M_t|\le C$. Its decision policy $\pi_M$ is fit on durable memory only. Future decision quality is
+\begin{equation}
+J(M)=\mathbb{E}_{q\sim\mathcal{D}_{\text{future}}}\big[v_q\,p^\ast\!\big(\pi_M(q)\big)\big],
+\end{equation}
+where $p^\ast$ is the true success probability. The value of keeping an episode is
+\begin{equation}
+\eqname{ValueOfMemory}(e\mid M)=J(M\cup\{e\})-J(M),
+\label{eq:vom}
+\end{equation}
+and nightly consolidation with budget $b$ is
+\begin{equation}
+S_t=\arg\max_{S\subseteq B_t,\;|S|\le b} J(M_t\cup S).
+\label{eq:budget}
+\end{equation}
+Three facts shape the method. Equation~\ref{eq:vom} is a leave-one-out value, so it is not additive across episodes and greedy selection is a natural approximation. It is unobservable at write time, because it depends on $y$, $\tau$, $\kappa$, $p^\ast$, and $\mathcal{D}_{\text{future}}$. And an episode can have negative value: a corrupted, confounded, or poisoned outcome makes the policy worse. The \emph{counterfactual oracle} in our experiments solves Equation~\ref{eq:budget} greedily with access to $p^\ast$ and to each episode's eventual label; it is a reference point, not a true upper bound.
+
+%=====================================================================
+\section{Consequence-weighted consolidation}
+\label{sec:method}
+
+\subsection{The WHY score}
+For an episode whose outcome has resolved, we compute
+\begin{equation}
+\eqname{WHY}(e)=\prod_{f\in\{S,\,C,\,K,\,T,\,U\}}\big[\epsilon+(1-\epsilon)\,f(e)\big]\;\times\;\big(1-\lambda_M M(e)\big),
+\label{eq:why}
+\end{equation}
+with every factor in $[0,1]$, a floor $\epsilon=0.05$ so no single factor can zero an episode, and $\lambda_M=0.7$.
+
+\begin{itemize}
+\item \textbf{Surprise} $S(e)=|y-\hat p(e)|$ under the \emph{current} model, recomputed every night.
+\item \textbf{Consequence} $C(e)=\min(v_e/\bar v,3)/3$, stakes relative to the buffer mean.
+\item \textbf{Causal confidence} $K(e)$ asks whether the outcome is attributable to the decision. Our implementation detects day-level confounds: for each resolution day it computes the standardized deviation $z$ of all outcomes that resolved that day from the model's expectation, relative to the previous week's median, and sets $K=\sigma(-2(|z|-3))$. A day on which many unrelated decisions fail together is treated as a shock, not as evidence about the decisions.
+\item \textbf{Transferability} $T(e)$ is expected reuse (the ``need'' term of \citep{mattar2018}): mean kernel similarity between the episode and the last two days of tasks, normalized to $[0,1]$.
+\item \textbf{Uncertainty reduction} $U(e)=\tfrac12\log\!\big(1+w_e\,x_e^\top\Sigma x_e\big)$ with $w_e=\hat p(1-\hat p)$, the information the episode adds to the posterior, normalized by the night's maximum.
+\item \textbf{Manipulability} $M(e)=1$ if the outcome arrived through a channel that an interested party can write (a self-report), and $0$ if it was verified.
+\end{itemize}
+
+Surprise and uncertainty reduction overlap but are not redundant: $S$ needs the outcome and measures how wrong the model was; $U$ does not, and measures how much the model can still learn in that region. $S\cdot U$ plays the role of Mattar and Daw's gain, $T$ of need, $C$ converts to value units, and $K$ and $M$ weigh the reliability of the evidence. We implement the penalty for manipulability as a multiplicative discount, which avoids mixing units, and handle redundancy by sequential selection (below). All constants were fixed before any evaluation run; none were tuned.
+
+\subsection{Retroactive tagging}
+An episode whose outcome has not resolved is not scored as unimportant; it is \emph{deferred}. It stays eligible for as long as it remains in the buffer and is rescored every night. Its own late outcome can therefore promote it, and so can a change in the model that makes an already-resolved but unremarkable episode informative. We also test a propagation variant, loosely analogous to behavioral tagging, in which a surprising, consequential outcome boosts the transferability of similar buffered episodes.
+
+\subsection{Redundancy}
+Selection is greedy. After each pick $e=(x,y)$ with $w=\hat p(1-\hat p)$, the posterior takes a rank-one Laplace step,
+\begin{equation}
+\theta\leftarrow\theta+\frac{\Sigma x\,(y-\hat p)}{1+w\,x^\top\Sigma x},\qquad
+\Sigma\leftarrow\Sigma-\frac{w\,\Sigma x x^\top\Sigma}{1+w\,x^\top\Sigma x},
+\end{equation}
+where both updates use the pre-update $\Sigma$, and $S$ and $U$ are recomputed for the remaining candidates. Ten near-duplicates of the same lesson stop looking informative once one of them is in memory.
+
+\begin{algorithm}[t]
+\caption{Dream cycle (one night)}
+\label{alg:dream}
+\small
+\begin{algorithmic}[1]
+\Require buffer $B_t$, durable memory $M_t$, posterior $(\theta,\Sigma)$, budget $b$, capacity $C$
+\State $E\gets\{e\in B_t:\ e\ \text{not consolidated},\ \tau_e\le t\}$ \Comment{unresolved episodes are deferred, not discarded}
+\State compute causal confidence per resolution day; compute $S,C,K,T,U,M$ for $e\in E$
+\State $S_t\gets\emptyset$
+\For{$i=1$ \textbf{to} $\min(b,|E|)$}
+  \State $e^\ast\gets\arg\max_{e\in E\setminus S_t}\eqname{WHY}(e)$; \ $S_t\gets S_t\cup\{e^\ast\}$
+  \State rank-one update of $(\theta,\Sigma)$ with $e^\ast$; recompute $S$ and $U$ on $E\setminus S_t$
+\EndFor
+\State $M_{t+1}\gets M_t\cup S_t$; evict the oldest engrams while $|M_{t+1}|>C$
+\State refit $(\theta,\Sigma)$ on engrams in $M_{t+1}$ whose outcomes have resolved
+\State episodes older than $H$ days leave the buffer; those never consolidated are forgotten
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{What forgetting means here}
+An episode is forgotten when it leaves the buffer without being consolidated. Durable memory evicts its oldest engrams first under every policy, so the policies we compare differ only in what they admit. Figure~\ref{fig:loop} shows the loop.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[x=1cm,y=1cm,
+  box/.style={draw=ink2!60,rounded corners=3pt,fill=white,align=center,font=\footnotesize,minimum height=10mm,minimum width=28mm,inner xsep=4pt,text=ink},
+  hot/.style={box,draw=whyblue,line width=1pt},
+  soft/.style={box,draw=muted!70,text=ink2},
+  arr/.style={-{Stealth[length=2.2mm]},draw=ink2,line width=0.6pt},
+  lab/.style={font=\scriptsize,text=ink2},
+  lane/.style={font=\scriptsize\sffamily\bfseries,text=muted}
+]
+\node[lane,anchor=east] at (-1.75,0) {DAY};
+\node[lane,anchor=east] at (-1.75,-2.3) {NIGHT};
+\node[box] (q) at (0,0) {Decision\\\scriptsize choose among three paths};
+\node[box] (o) at (3.9,0) {Consequence\\\scriptsize now, later, or never};
+\node[box] (b) at (7.8,0) {Episodic buffer\\\scriptsize last $H$ days};
+\node[hot] (s) at (7.8,-2.3) {\textbf{Dream cycle}\\\scriptsize score resolved episodes};
+\node[box] (m) at (3.9,-2.3) {Engrams\\\scriptsize durable memory, $|M|\le C$};
+\node[box] (r) at (0,-2.3) {Refit model};
+\node[soft] (f) at (11.7,-2.3) {Forgotten\\\scriptsize aged out, never selected};
+\draw[arr] (q) -- (o);
+\draw[arr] (o) -- (b);
+\draw[arr] ([xshift=-6mm]b.south) -- node[lab,left]{resolved} ([xshift=-6mm]s.north);
+\draw[arr] ([xshift=6mm]s.north) -- node[lab,right]{unresolved: wait} ([xshift=6mm]b.south);
+\draw[arr] (s) -- node[lab,above]{top $b$} (m);
+\draw[arr] (m) -- (r);
+\draw[arr] (r) -- node[lab,left]{next day} (q);
+\draw[arr,draw=muted] (s) -- (f);
+\end{tikzpicture}
+\caption{Consequence-weighted consolidation. During the day the agent decides, and consequences resolve on their own schedule. At night the dream cycle scores buffered episodes whose outcomes are known, consolidates at most $b$ of them into capacity-limited durable memory, and lets the rest either wait for their outcomes or age out.}
+\label{fig:loop}
+\end{figure}
+
+%=====================================================================
+\section{Experiment 1: controlled simulation}
+\label{sec:setup}
+
+\paragraph{Tasks.} Each day the agent makes 100 decisions drawn from eight task families. Every decision offers three options described by twelve features: eight rule features (each family activates four), an agreeableness feature, and three distractors. An option succeeds with probability $\sigma(\theta^{\ast\top}x+b_f)$, where the rule weights satisfy $|\theta^\ast_j|\in[0.6,1.8]$, agreeableness carries a small negative weight ($-0.3$; flattering options are slightly worse), distractors carry none, and $b_f\sim\mathcal N(0,0.3^2)$ is a family offset the agent cannot model. Three held-out families recombine the same rule features and never appear during learning; we use them to measure transfer. About \env{routine}\% of decisions are near-duplicates of routine prototypes.
+
+\paragraph{Stakes and delays.} Each decision has stakes $v\sim\text{LogNormal}(\mu_f,0.5)$ with three family tiers. Outcomes resolve the same day, after one to six days, or never, and higher-stakes tiers are more often delayed (same-day/delayed/never: 70/10/20\%, 50/30/20\%, 30/50/20\%). Across a run, \env{never}\% of outcomes never resolve and \env{delayed}\% of resolvable outcomes arrive late.
+
+\paragraph{Channels, shocks, approval, salience.} About \env{selfreport}\% of outcomes arrive by self-report, which flips the label with probability 0.2; the rest are verified. On shock days (probability 0.07 per day after day 5; \env{shockdays} per run on average) 60\% of the outcomes that resolve that day are forced to failure whatever the decision was, so they are real consequences that say nothing about the decision. After each decision the user gives a thumbs-up with probability $\sigma(1.5\,g+1.5\,(2p^\ast-1))$, where $g$ is the chosen option's agreeableness: approval tracks quality but rewards flattery. A drama score (2 with probability 0.15, plus Gaussian noise) marks emotionally salient episodes and is unrelated to learning value.
+
+\paragraph{Scenarios.} \emph{Clean}: same-day verified outcomes, no approval bias, no drama, no shocks. \emph{Realistic}: everything above. \emph{Poisoning}: Realistic plus, on days 25--34, 20 extra episodes per day whose self-reported outcomes follow a false rule (success if and only if a distractor is positive), with maximal approval and drama and same-day resolution. \emph{Verified poisoning}: the same false outcomes arrive through the verified channel. \emph{World change}: Realistic, but the two largest rule weights flip sign at night 30. For a given seed all scenarios share the same base task stream, outcomes, and noise (common random numbers).
+
+\paragraph{Agent and memory.} The agent is a Bayesian logistic regression (prior $\mathcal N(0,1.5^2 I)$; MAP by damped Newton with Armijo backtracking; Laplace posterior) that acts by Thompson sampling \citep{russo2018tutorial}. Durable memory is its only training data: each night it is refit on the engrams whose outcomes have resolved. The buffer holds $H=8$ days of episodes; each night a policy may consolidate up to $b=20$ episodes into durable memory of capacity $C=300$ (5\% of a run's decisions). We chose this agent because it makes $J(M)$ exactly computable, which lets us compare every policy with a counterfactual oracle and trace failures to specific memories.
+
+\paragraph{Policies.} Table~\ref{tab:policies} lists the 13 policies. Two are references rather than competitors: the counterfactual oracle and \emph{keep everything}, which consolidates every episode with unbounded capacity and therefore is not subject to the capacity limit in the hypothesis.
+
+\begin{table}[t]
+\centering\small
+\caption{Consolidation policies. ``Outcome'' marks policies whose selection uses resolved outcomes.}
+\label{tab:policies}
+\begin{tabular}{@{}p{4.3cm}p{9.6cm}c@{}}
+\toprule
+Policy & Selection signal & Outcome\\
+\midrule
+Random & uniform over buffered episodes & \\
+Random (resolved only) & uniform over episodes whose outcomes have resolved; isolates the value of waiting & \checkmark\\
+Recency (FIFO) & most recent episodes & \\
+Recurrence & episodes whose topic recurred most often in the buffer & \\
+Similarity to recent queries & mean kernel similarity to the last two days of tasks & \\
+Self-rated importance & simulated rater: drama $+\,0.5\times$ standardized log stakes $+$ noise, at write time, in the style of poignancy ratings \citep{park2023} & \\
+User preference (selection) & thumbs-up episodes; trains on outcomes & \\
+User preference (as reward) & same selection; trains on approval instead of outcomes & \\
+Surprise (PER-style) & sampled $\propto(|y-\hat p|+0.01)^{0.6}$ among resolved episodes \citep{schaul2016per} & \checkmark\\
+Surprise (greedy top-$b$) & the $b$ most surprising resolved episodes & \checkmark\\
+\textbf{WHY} & Equation~\ref{eq:why}, retroactive tagging, redundancy control & \checkmark\\
+Counterfactual oracle & greedy Equation~\ref{eq:budget} with true $p^\ast$ and eventual labels & \checkmark\\
+Keep everything & every episode, unbounded capacity & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Metrics.} \emph{Decision quality} is the stakes-weighted true success of the agent's greedy choices on a fixed probe of 500 tasks from the training families, normalized so that random choice scores 0 and optimal choice scores 1; unless stated otherwise we report its mean over nights 40--59. \emph{Transfer} is the same quantity on 500 tasks from the held-out families. \emph{Calibration error} (ECE$^\ast$) compares the predicted success of each greedy choice with its true success probability in ten bins \citep{guo2017calibration}. \emph{Regret} is the stakes-weighted expected regret of the agent's actual decisions over all 60 days, as a percentage of a uniformly random policy's regret. \emph{Oracle headroom captured} is $(q-q_{\text{random}})/(q_{\text{oracle}}-q_{\text{random}})$ for decision quality $q$. \emph{Poison damage} is decision quality over nights 25--44 minus the same policy's value in the Realistic scenario on identical base streams.
+
+\paragraph{Protocol.} Environment parameters and \WHY{} constants were fixed before evaluation. Development used seeds 1000--1004; every number reported here comes from evaluation seeds 0--19, with common random numbers across policies. We report means with 95\% $t$-intervals across seeds and paired differences. Three protocol deviations occurred (Appendix~\ref{app:deviations}). The most consequential was a solver bug found after the first evaluation run; we discarded that run and re-ran every suite.
+
+%=====================================================================
+\section{Results}
+\label{sec:results}
+\input{results_body.tex}
+
+%=====================================================================
+\section{Experiment 2 (preregistered): LLM agents}
+\label{sec:prereg}
+
+Experiment~1 establishes when the principle should matter, not whether it does for language-model agents. The following protocol will be registered before any LLM-agent result is observed.
+
+\paragraph{Agent and durable memory.} A frozen open-weight instruction model in the 4--9B parameter range (checkpoint pinned at registration), with two durable-memory implementations: (a) a $K$-slot engram store ($K\in\{32,128\}$) retrieved into context, and (b) nightly LoRA consolidation on replayed engrams under a fixed token budget, with a held-out regression suite to detect interference.
+
+\paragraph{Task streams with delayed, measurable outcomes.} (i) \emph{Forecasting}: time-sliced replay of resolved binary questions, where the agent sees only information available before each question's resolution date and outcomes arrive at the real resolution lag. (ii) \emph{Code changes} judged by hidden tests executed after a delay (verified), plus a simulated user report of whether the change worked (self-report, with a known 20\% error rate). (iii) \emph{Three-option recommendations} for simulated users whose true utility is revealed days later and whose immediate approval is biased toward agreeable options. (iv) A clean control with immediate, trustworthy outcomes (household tasks).
+
+\paragraph{Stressors and policies.} Outcome delay, never-resolving episodes, channel noise, an injected outage that fails every action on a day, injected misleading episodes through the self-report channel in the style of \citep{dong2025minja}, and a verified-channel poisoning arm. Policies are the Experiment~1 set with real implementations where they exist (LLM-rated importance with the Generative Agents prompt; embedding similarity; recency; recurrence; approval; PER-style surprise on the model's log-loss), plus ReasoningBank-style self-judged success, Memory Worth counters, TraceRetain-style linear scoring, keep-everything, and an oracle estimated by leave-one-out replay on a subsample.
+
+\paragraph{Outcomes.} The primary outcome is utility on future held-out tasks (success rate, Brier score, or true user utility, by stream), averaged over the last third of each stream. Secondary outcomes are transfer to held-out task families, calibration, regret, the share of memory that is poison, and compute cost.
+
+\paragraph{Hypotheses and decision rules.}
+\begin{enumerate}[label=\textbf{H\arabic*},leftmargin=2.2em]
+\item (primary) In the stressed streams, \WHY{} exceeds the best write-time heuristic on the primary outcome by at least 2 percentage points, paired across at least 5 seeds and 3 streams (one-sided $\alpha=0.05$).
+\item The \WHY{} advantage is smaller in the clean control than in the stressed streams (interaction test).
+\item Under self-report poisoning, \WHY{}'s poison share in memory is at most half that of LLM-rated importance and of approval.
+\item (predicted failure) Under verified-channel poisoning, \WHY{} is no better than random retention at excluding poison.
+\item \WHY{}'s calibration error exceeds random retention's unless a calibration reservoir is used.
+\item (secondary; added after Experiment~1's ablations) A reduced score without surprise, consequence, and transferability (keeping deferral, causal confidence, uncertainty reduction, the manipulability discount, and redundancy control) is at least as good as the full score on the primary outcome and better calibrated.
+\end{enumerate}
+\noindent If H1 fails, we reject the core hypothesis for LLM agents with these memory implementations. If H1 holds but H2 fails, we will not attribute the effect to consequence gating. If H4 fails, we will look for an unanticipated mechanism before crediting the method.
+
+%=====================================================================
+\section{From simulation to system: the WHY loop}
+\label{sec:system}
+
+why.com currently runs a question-first loop: a question produces an answer and three follow-up paths, and the user's choice is recorded. The consolidation principle suggests extending that loop from choice to consequence:
+\[
+\text{question}\rightarrow\text{answer}\rightarrow\text{three paths}\rightarrow\text{choice}\rightarrow\text{action or prediction}\rightarrow\text{outcome}\rightarrow\text{engram}.
+\]
+
+\begin{table}[h]
+\centering\small
+\caption{Mapping the method onto the WHY product architecture.}
+\label{tab:system}
+\begin{tabular}{@{}lp{9.3cm}l@{}}
+\toprule
+Component & Role & Status\\
+\midrule
+Curiosity Graph & episodic record of what was explored & exists\\
+Rejection Graph & alternatives that were shown but not chosen; the basis for counterfactual evaluation of paths & proposed\\
+Outcome Ledger & what happened, when it resolved, through which channel, at what verification level & proposed\\
+WHY score & which experiences deserve to change future behavior & proposed\\
+Engrams & durable, consolidated memory & proposed\\
+Dream Cycle & nightly deferral, rescoring, consolidation, and forgetting & proposed\\
+WHY Ranker & uses engrams to decide which paths to offer next & proposed\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Three findings from Experiment~1 become design constraints. First, consolidation is only as robust as its outcome channel: under verified poisoning the method admitted more poison than random retention, so the Outcome Ledger's verification levels are part of the security boundary, not metadata. Second, the learning signal has to be outcomes rather than approval: training on approval instead of outcomes was the worst of the 13 policies in every scenario with approval bias, and the second worst without it. Third, what earned its place in the score was timing and trust rather than drama (Section~\ref{sec:ablations}), so the Outcome Ledger's resolution times and channels matter more than any salience signal. The dream report in Figure~\ref{fig:dream} shows what a public, per-night account of consolidation could look like; every number in it comes from a simulation run.
+
+\input{dream_box.tex}
+
+%=====================================================================
+\section{Limitations}
+\label{sec:limits}
+\input{limitations.tex}
+
+%=====================================================================
+\section{Conclusion}
+Memory systems are selection policies whether or not they say so. We argued that selection should be grounded in what happened after an experience rather than in how it looked or felt when it happened, and that consolidation should wait for consequences and be willing to change its mind. In a controlled setting where that claim can be checked against a counterfactual oracle, capacity-limited consequence-weighted consolidation beat every write-time heuristic we tested, most clearly when outcomes were missing, noisy, confounded, or manipulated, and when memory was scarce. The evidence also narrows the claim. What mattered was timing and trust, not drama: surprise and stakes did not help, and surprise cost calibration. Robustness to poisoning depended on knowing which channels can lie. And unbounded memory did better in every stationary world; forgetting paid off only when the world changed. Curiosity creates experiences and reality assigns consequences; the consolidation policy decides which consequences get to change the system. That decision should be explicit, auditable, and tested.
+
+\bibliographystyle{plainnat}
+\bibliography{refs}
+
+\appendix
+\input{appendix.tex}
+
+\end{document}

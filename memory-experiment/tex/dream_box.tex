@@ -1,0 +1,17 @@
+\begin{figure}[t]
+\begin{tcolorbox}[colback=white,colframe=hair,boxrule=0.6pt,arc=3pt,left=10pt,right=10pt,top=8pt,bottom=8pt,fontupper=\small]
+{\sffamily\bfseries\large WHY dreamed.}\hfill{\sffamily\footnotesize\color{ink2} Simulation run: Poisoning scenario, seed 0, night 30}\\[6pt]
+{\sffamily
+\begin{tabular}{@{}r@{\hspace{6pt}}l@{\hspace{2.5em}}r@{\hspace{6pt}}l@{}}
+\textbf{120} & experiences today & \textbf{20} & memories consolidated\\
+\textbf{95} & outcomes resolved tonight & \textbf{24} & of 500 probe decisions changed\\
+\textbf{575} & resolved episodes competed for the slots & \textbf{85} & forgotten tonight\\
+\end{tabular}}\\[6pt]
+\textbf{We remembered this.} A high-stakes decision from day 26. Its verified outcome arrived 4 days later: we had predicted a 40\% chance of success, and it failed. (Surprise 0.40, consequence 1.00, causal confidence 0.99, uncertainty reduction 0.54.)\\[4pt]
+\textbf{We declined this.} The most important-looking episode we did not keep: a decision from day 30 with a thumbs-up, maximal drama, and a self-reported outcome that arrived the same day saying it worked. Manipulable channel, discount applied. [Ground truth: poisoned.] Tonight all 112 poisoned episodes in the buffer were declined.\\[4pt]
+\textbf{We changed our mind about this.} The belief that moved furthest toward the truth this week: the weight on rule feature 3 went from +0.42 to +0.49 (true value +0.65). The weight on the feature the campaign was promoting stands at $-$0.06 (true value 0).
+\end{tcolorbox}
+\vspace{-6pt}
+\caption{A dream report generated from Experiment~1. Counts, factor values, and weights are read from the run; the wording is a fixed template. The belief shown is the rule weight whose error fell most over the past week, and ground truth is visible only because this is a simulation.}
+\label{fig:dream}
+\end{figure}

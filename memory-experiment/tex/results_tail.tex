@@ -1,0 +1,43 @@
+\input{tab_ablation.tex}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{../figs/fig_ablation.pdf}
+\caption{Ablations: paired difference from the full method with 95\% CIs (20 seeds). Left of zero means the component helps.}
+\label{fig:ablation}
+\end{figure}
+
+\subsection{Which parts of the score matter}
+\label{sec:ablations}
+The ablations (Table~\ref{tab:ablation}, Figure~\ref{fig:ablation}) do not support every factor in Equation~\ref{eq:why}. The components that carried decision quality in the Realistic scenario were retroactive tagging (\val{abl-realistic-noretro-ndq_tr}), the manipulability discount (\val{abl-realistic-noM-ndq_tr}), causal confidence (\val{abl-realistic-noK-ndq_tr}), uncertainty reduction (\val{abl-realistic-noU-ndq_tr}), and redundancy control (\val{abl-realistic-nogreedy-ndq_tr}). Removing consequence (\val{abl-realistic-noC-ndq_tr}) or transferability (\val{abl-realistic-noT-ndq_tr}) made no measurable difference, and removing surprise slightly \emph{improved} decision quality (\val{abl-realistic-noS-ndq_tr}) and poison resistance (\val{abl-poison-noS-ndq_pwin} over nights 25--44).
+
+Surprise is also where the calibration cost comes from. WHY's calibration error was \val{realistic-why-ece}, about \val{ece-ratio-why-random} times random retention's \val{realistic-random-ece}; without the surprise factor it fell to \val{noS-realistic-ece-val}, better than every capacity-limited baseline. Selecting outcomes because the model got them wrong gives the model a sample in which it is usually wrong, which shifts its probabilities even while its choices improve. Consequence raised poison intake for a related reason: honest high-stakes outcomes tend to arrive late, so same-day outcomes, including poison, look relatively consequential on the night they resolve (without the consequence factor, poison fell to \val{abl-poison-noC-poison34-val}\% of memory).
+
+The honest summary is that what worked was \emph{when} and \emph{how far to trust} an outcome, not how dramatic it was: wait for the consequence, discount channels that can be written by interested parties, ignore days on which everything failed at once, and prefer evidence the model can still learn from. We keep Equation~\ref{eq:why} as the tested specification, because changing it now would mean tuning on evaluation seeds. A reduced score without surprise, consequence, or transferability is preregistered as a secondary arm of Experiment~2.
+
+\input{results_sweeps.tex}
+
+\subsection{Calibration and regret}
+Beyond the surprise factor, selecting for decision value costs calibration in general: the oracle, which also selects for decision value, was similarly miscalibrated (\val{realistic-oracle-ece}). Online regret for WHY was \val{realistic-why-regret}\% of a random policy's, close to the oracle's \val{realistic-oracle-regret}\% and below every other capacity-limited policy, but well above unbounded memory's \val{realistic-keep_all-regret}\%, whose tighter posterior needs less exploration.
+
+\subsection{Verdict}
+Table~\ref{tab:verdict} restates the hypothesis and its parts against the evidence.
+\begin{table}[H]
+\centering\small
+\caption{The hypothesis against the evidence from Experiment~1.}
+\label{tab:verdict}
+\begin{tabular}{@{}p{4.7cm}p{7.0cm}p{2.9cm}@{}}
+\toprule
+Claim & Evidence & Verdict\\
+\midrule
+Beats FIFO, similarity, recurrence, self-rated salience, and user preference under a capacity limit & positive on every seed in Realistic, Poisoning, and World change; smaller but positive in Clean & supported\\
+The advantage comes from late, noisy, or manipulated outcomes & Clean gap \val{pair-clean-random-ndq_tr} vs random, Realistic \val{pair-realistic-random-ndq_tr}; noisy and manipulated channels matter, the share of late outcomes barely does & partly supported\\
+The advantage grows as capacity shrinks & gap to resolved-only random: \val{capsw-why-50} vs \val{capsw-random_resolved-50} at 50 engrams; matches unbounded memory at 1{,}000 & supported\\
+Robust to misleading experiences & self-report poisoning and shocks: yes; verified poisoning: admits poison at \val{pratio-poison_verified-why}$\times$ the honest rate & conditional\\
+Retroactive tagging matters & largest ablation in Realistic; similar gap with or without late outcomes, so its value comes from deferral and rescoring & supported, not delay-specific\\
+Every factor of the WHY score earns its place & surprise, consequence, and transferability do not in this environment & not supported\\
+Bounded, selective memory beats remembering everything & only when the world changes; unbounded memory wins in every stationary scenario & not supported in stationary worlds\\
+Improves calibration & worse than random retention (driven by the surprise factor) & not supported\\
+\bottomrule
+\end{tabular}
+\end{table}

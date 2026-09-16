@@ -1,0 +1,22 @@
+\begin{table}[t]
+\centering\small
+\caption{Ablations of WHY (paired differences from the full method, 20 seeds, mean $\pm$ 95\% CI). Negative values mean the component helps. Poison share: percentage points of durable memory at night 34.}
+\label{tab:ablation}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+& Realistic & \multicolumn{3}{c}{Poisoning} \\
+\cmidrule(lr){2-2}\cmidrule(lr){3-5}
+Variant & $\Delta$ decision quality & $\Delta$ quality, nights 25--44 & $\Delta$ poison share & $\Delta$ ECE$^\ast$\\
+\midrule
+without Surprise $S$ & +0.004{\scriptsize$\,\pm$0.004} & +0.015{\scriptsize$\,\pm$0.006} & $-$1.9{\scriptsize$\,\pm$0.5} & $-$0.091{\scriptsize$\,\pm$0.007}\\
+without Consequence $C$ & 0.000{\scriptsize$\,\pm$0.003} & +0.008{\scriptsize$\,\pm$0.005} & $-$3.5{\scriptsize$\,\pm$0.6} & +0.033{\scriptsize$\,\pm$0.009}\\
+without Causal confidence $K$ & $-$0.015{\scriptsize$\,\pm$0.006} & $-$0.008{\scriptsize$\,\pm$0.007} & $-$0.7{\scriptsize$\,\pm$0.5} & +0.027{\scriptsize$\,\pm$0.008}\\
+without Transferability $T$ & 0.000{\scriptsize$\,\pm$0.003} & +0.004{\scriptsize$\,\pm$0.004} & +0.6{\scriptsize$\,\pm$0.3} & +0.002{\scriptsize$\,\pm$0.003}\\
+without Uncertainty reduction $U$ & $-$0.007{\scriptsize$\,\pm$0.004} & $-$0.009{\scriptsize$\,\pm$0.003} & $-$0.7{\scriptsize$\,\pm$0.4} & 0.000{\scriptsize$\,\pm$0.004}\\
+without Manipulability discount & $-$0.021{\scriptsize$\,\pm$0.007} & $-$0.065{\scriptsize$\,\pm$0.012} & +12.4{\scriptsize$\,\pm$0.7} & +0.054{\scriptsize$\,\pm$0.007}\\
+without retroactive tagging & $-$0.029{\scriptsize$\,\pm$0.008} & $-$0.029{\scriptsize$\,\pm$0.009} & $-$0.6{\scriptsize$\,\pm$0.4} & $-$0.017{\scriptsize$\,\pm$0.005}\\
+without redundancy control & $-$0.004{\scriptsize$\,\pm$0.002} & +0.001{\scriptsize$\,\pm$0.004} & $-$0.3{\scriptsize$\,\pm$0.2} & $-$0.002{\scriptsize$\,\pm$0.001}\\
+with tag propagation & $-$0.001{\scriptsize$\,\pm$0.002} & +0.001{\scriptsize$\,\pm$0.003} & $-$0.1{\scriptsize$\,\pm$0.3} & +0.003{\scriptsize$\,\pm$0.003}\\
+\bottomrule
+\end{tabular}
+\end{table}
