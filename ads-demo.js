@@ -225,9 +225,17 @@
       success.className = "ads-lead-success";
       success.setAttribute("role", "status");
       const strong = document.createElement("strong");
-      strong.textContent = "Qualified lead event.";
-      success.append(strong, document.createTextNode(" In production, this explicit opt-in would trigger the advertiser's $" + CAMPAIGN.bidDollars + " bid. This demo transmitted nothing."));
+      strong.textContent = "You're set.";
+      success.append(strong, document.createTextNode(" In production, this opt-in would trigger the advertiser's $" + CAMPAIGN.bidDollars + " bid. Keep following the path."));
       form.replaceWith(success);
+      const doorZone = root.querySelector(".door-zone");
+      doorZone?.removeAttribute("hidden");
+      document.querySelector("#followForm")?.removeAttribute("hidden");
+      const firstDoor = doorZone?.querySelector(".curiosity-door");
+      requestAnimationFrame(() => {
+        if (!matchMedia("(prefers-reduced-motion: reduce)").matches) doorZone?.scrollIntoView({ behavior: "smooth", block: "center" });
+        firstDoor?.focus({ preventScroll: true });
+      });
     });
 
     card.append(form);
@@ -245,14 +253,14 @@
       if (!button.querySelector(".ads-sponsor-tag")) {
         const tag = document.createElement("small");
         tag.className = "ads-sponsor-tag";
-        tag.textContent = "Sponsored · " + CAMPAIGN.advertiser + " example";
+        tag.textContent = "Sponsored";
         button.prepend(tag);
       }
     }
     const sponsoredAnswer = normalize(query) === sponsoredQuery;
     const followForm = document.querySelector("#followForm");
     if (sponsoredAnswer) {
-      root.querySelector(".door-zone")?.remove();
+      root.querySelector(".door-zone")?.setAttribute("hidden", "");
       root.querySelector(".name-ritual")?.remove();
       followForm?.setAttribute("hidden", "");
       renderLeadCard(root);
