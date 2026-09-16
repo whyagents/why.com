@@ -32,9 +32,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="WHY Research tests whether human curiosity, visible alternatives, and expert judgment can teach AI what to question next.">
-  <meta property="og:title" content="WHY Research — A Prudent Question">
-  <meta property="og:description" content="AI learned how to answer. WHY Research asks whether comparative human judgment can teach it what to question next.">
+  <meta name="description" content="WHY Research studies which experiences should change an AI's future decisions—and what evidence should justify the change.">
+  <meta property="og:title" content="Every Memory Needs a WHY">
+  <meta property="og:description" content="A controlled experiment in consequence-aware memory, with the results, limits, and next test in the open.">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="WHY">
   <title>Research - WHY</title>
@@ -387,6 +387,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       max-width: 12ch;
       font-size: clamp(4.25rem, 13vw, 8.7rem);
       font-weight: 400;
+    }
+
+    .research-title {
+      max-width: 16ch;
+      font-size: clamp(3.6rem, 9vw, 7.2rem);
+      line-height: 0.92;
     }
 
     .title-extension {
@@ -935,21 +941,57 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   <main class="paper">
     <header class="title-page">
-      <p class="eyebrow reveal">WP-02 · Next-Question Ranking</p>
-      <h1 class="reveal" style="--delay: 80ms">A Prudent Question</h1>
-      <p class="title-extension reveal" style="--delay: 160ms">Teaching machines what to question next</p>
-      <p class="subtitle reveal" style="--delay: 240ms">Bounded choice, expected information gain, and the Curiosity Graph</p>
-      <p class="date reveal" style="--delay: 320ms">August 2026</p>
+      <p class="eyebrow reveal">WHY Research · Memory Experiment 1</p>
+      <h1 class="research-title reveal" style="--delay: 80ms">Every memory needs a WHY.</h1>
+      <p class="title-extension reveal" style="--delay: 160ms">Learning from what happened next</p>
+      <p class="subtitle reveal" style="--delay: 240ms">Which experiences deserve to change future behavior?</p>
+      <p class="date reveal" style="--delay: 320ms">September 2026</p>
 
       <div class="abstract reveal" style="--delay: 400ms">
         <p class="label">Abstract</p>
-        <p>Language models are trained to answer assigned problems. WHY studies the decision before the next problem is assigned: what deserves investigation now? A bounded slate turns ordinary exploration into comparative evidence. One option is pursued; two visible alternatives are left behind. WHY Pro is designed to add explicit expert judgments about what should be investigated next. WP-02 asks whether those signals can train a ranking layer that learns faster than likelihood alone, transfers across people and subjects, and improves what users discover. The deployed product is the baseline. The expert corpus and learned selector remain a falsifiable research program. <a href="whitepaper.pdf" target="_blank" rel="noopener" style="color:#c4aa72;text-decoration:underline;text-underline-offset:.2em;">Read the complete whitepaper.</a></p>
+        <p>Most memory systems decide what to keep when an experience is written: recent, surprising, emotional, or frequently repeated. WHY tests a different principle. An experience deserves to influence future behavior when keeping it improves later decisions. Experiment 1 evaluates that idea in a controlled simulation. It does not establish transfer to language-model agents. <a href="https://github.com/whyagents/why.com/tree/main/memory-experiment" target="_blank" rel="noopener" style="color:#c4aa72;text-decoration:underline;text-underline-offset:.2em;">Inspect the code and results.</a></p>
       </div>
     </header>
 
+    <section id="memory-research" class="reveal">
+      <span class="section-number">Current</span>
+      <h2>Consequence-Aware Memory</h2>
+
+      <h3>The Research Loop</h3>
+      <div class="math reveal">
+        <pre>experience → outcome → evidence → retain, revise, or forget</pre>
+      </div>
+      <p>The question is not whether an event looked important when it happened. The question is whether its later consequences justify letting it change the agent. That makes memory a revisable selection policy, not an ever-growing transcript.</p>
+
+      <div class="absence-grid">
+        <article class="absence reveal">
+          <h4>Tested</h4>
+          <p>Thirteen memory policies across five simulated scenarios and twenty evaluation seeds.</p>
+        </article>
+        <article class="absence reveal">
+          <h4>Observed</h4>
+          <p>Consequence-weighted consolidation beat the write-time heuristics tested in the controlled environment.</p>
+        </article>
+        <article class="absence reveal">
+          <h4>Boundary</h4>
+          <p>Unbounded memory remained better in stationary worlds. Forgetting paid mainly when the world changed.</p>
+        </article>
+        <article class="absence reveal">
+          <h4>Not proved</h4>
+          <p>The experiment used a Bayesian logistic agent, not an LLM. Agent transfer requires a separate evaluation.</p>
+        </article>
+      </div>
+
+      <h3>What Could Break It</h3>
+      <p>Consequence-aware memory depends on reliable outcomes. Delayed, noisy, misattributed, or manipulated feedback can teach the wrong lesson. Surprise and apparent stakes were not dependable substitutes for verified consequences in this experiment.</p>
+      <p><a href="https://github.com/whyagents/why.com/blob/main/memory-experiment/tex/main.pdf" target="_blank" rel="noopener" style="color:#c4aa72;text-decoration:underline;text-underline-offset:.2em;">Read Every Memory Needs a WHY.</a></p>
+    </section>
+
     <section id="instrument" class="reveal">
-      <span class="section-number">1</span>
-      <h2>The Instrument</h2>
+      <span class="section-number">Prior work · WP-02</span>
+      <h2>A Prudent Question</h2>
+
+      <p>Before studying how experience should enter memory, WHY defined the live product instrument: one answer, three visible directions, and an observable choice. WP-02 remains the framework for next-question selection; it is prior work, not a completed learned ranking system.</p>
 
       <h3>1.1 One Answer, Three Questions</h3>
       <p>For each question, WHY returns one compact answer and exactly three possible directions. The interface deliberately bounds the choice set: the user can select one question or leave.</p>
@@ -1063,8 +1105,8 @@ subject to:
         </article>
       </div>
 
-      <h3>3.2 One Platform, Separate Evidence</h3>
-      <p><strong>Why.com</strong> is the consumer instrument for authentic curiosity paths. <strong>WHY Pro</strong> is the proposed opt-in expert instrument for deliberate next-question judgment. <strong>WHY AI</strong> is the generation, validation, and ranking layer. <strong>WP-02</strong> tests whether those sources improve learned selection. <strong>WHY Desktop</strong> is the private personal layer; its memory is not population training data by default.</p>
+      <h3>3.2 One Mission, Separate Claims</h3>
+      <p><strong>Why.com</strong> is a live tool for exploring questions. <strong>WHY Desktop</strong> is a local-first memory pilot. <strong>WP-02</strong> defines a research framework for next-question selection. <strong>Memory Experiment 1</strong> tests consequence-aware consolidation in simulation. The product surfaces provide useful instruments, but they do not make the experimental results production capabilities.</p>
     </section>
 
     <section id="evaluation" class="reveal">
@@ -1108,10 +1150,10 @@ subject to:
     <section id="conclusion" class="conclusion reveal">
       <span class="section-number">6</span>
       <h2>Conclusion</h2>
-      <p>Experts teach machines how to solve assigned problems. WHY is building the questioning layer: a system for learning which problem deserves attention next.</p>
-      <p>WP-02 does not claim that the learned system is complete. It defines the instrument, the proposed selector, the evidence required, and the observations that would prove the thesis wrong.</p>
-      <p class="closing-line">AI learned how to answer. WHY is testing how to teach it what to question next.</p>
-      <p><a href="whitepaper.pdf" target="_blank" rel="noopener" style="color:#c4aa72;text-decoration:underline;text-underline-offset:.2em;">Read WP-02: A Prudent Question Is One-Half of Wisdom.</a></p>
+      <p>WHY builds tools for exploring questions and researches how AI learns from experience. The connecting idea is selection: which question deserves attention now, and which experience deserves influence later?</p>
+      <p>The live product answers the first question for a human interface. The research program tests the second under controlled conditions. Neither result should be mistaken for the other.</p>
+      <p class="closing-line">Memory is not everything that happened. It is what earns the right to matter again.</p>
+      <p><a href="whitepaper.pdf" target="_blank" rel="noopener" style="color:#c4aa72;text-decoration:underline;text-underline-offset:.2em;">Read prior work: A Prudent Question Is One-Half of Wisdom.</a></p>
     </section>
   </main>
 

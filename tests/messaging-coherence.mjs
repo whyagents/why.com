@@ -10,14 +10,17 @@ const check = (name, condition) => {
   else { fail += 1; console.error(`  FAIL  ${name}`); }
 };
 
-console.log("\n[WHY] unified questioning-layer narrative");
-check("About states the mission and business loop", pages["about.html"].includes("WHY teaches machines what to question next.") && pages["about.html"].includes("Free users reveal where curiosity wants to go. Experts show where intelligence should go. AI labs pay to learn the difference."));
-check("AI explains the human decision layer", pages["ai.html"].includes("AI that knows why") && pages["ai.html"].includes("one answer and three validated directions") && pages["ai.html"].includes("training data, reward models, and private evaluations"));
+console.log("\n[WHY] unified product-and-research narrative");
+check("About preserves the resurrection story", pages["about.html"].includes("The question<br><em>survived.</em>") && pages["about.html"].includes("The product is live. The learning architecture is being tested."));
+check("About names the company and separates the two programs", pages["about.html"].includes("built by Ockams, Inc.") && pages["about.html"].includes("one explores questions; the other tests how experience becomes useful memory"));
+check("AI uses the canonical umbrella", pages["ai.html"].includes("AI with a WHY") && pages["ai.html"].includes("We build tools for exploring questions and research how AI learns from experience."));
+check("AI separates live product from controlled research", pages["ai.html"].includes("Live product") && pages["ai.html"].includes("Controlled experiment") && pages["ai.html"].includes("does not establish that the result transfers to language-model agents"));
 check("Research keeps observation distinct from conscious rejection", pages["research.html"].includes("conscious rejection is not assumed") && pages["research.html"].includes("not treated as independent votes or proof that they were read"));
-check("Research separates deployed work from hypotheses", pages["research.html"].includes("The deployed product is the baseline") && pages["research.html"].includes("remain a falsifiable research program"));
-check("Research separates consumer, expert, AI, and private layers", pages["research.html"].includes("One Platform, Separate Evidence") && pages["research.html"].includes("WHY Pro") && pages["research.html"].includes("not population training data by default"));
-check("Desktop is positioned around personal questioning value", pages["app.html"].includes("your private questioning layer") && pages["app.html"].includes("ask what deserves attention next"));
-check("Desktop explicitly protects private memory", pages["app.html"].includes("does not become population training data by default") && pages["app.html"].includes("permissioned context"));
+check("Research leads with the current memory experiment", pages["research.html"].includes("Every memory needs a WHY.") && pages["research.html"].includes("Thirteen memory policies across five simulated scenarios and twenty evaluation seeds"));
+check("Research states the experimental boundary", pages["research.html"].includes("used a Bayesian logistic agent, not an LLM") && pages["research.html"].includes("requires a separate evaluation"));
+check("Research keeps WP-02 accessible as prior work", pages["research.html"].includes("Prior work · WP-02") && pages["research.html"].includes("whitepaper.pdf"));
+check("Desktop uses the approved privacy promise", pages["app.html"].includes("Your memory.<br>") && pages["app.html"].includes("<em>Your terms.</em>") && pages["app.html"].includes("Remember more.<br>"));
+check("Desktop identifies itself as a pilot", pages["app.html"].includes("local-first pilot") && pages["app.html"].includes("does not yet implement the complete consequence-aware consolidation architecture"));
 check("Each page keeps its short established title", pages["about.html"].includes("<title>About - WHY</title>") && pages["ai.html"].includes("<title>AI - WHY</title>") && pages["research.html"].includes("<title>Research - WHY</title>") && pages["app.html"].includes("<title>Desktop - WHY</title>"));
 
 console.log(`\n${pass} passed, ${fail} failed`);
